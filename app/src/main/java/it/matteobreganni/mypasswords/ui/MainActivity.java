@@ -5,8 +5,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.res.ColorStateList;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import it.matteobreganni.mypasswords.R;
@@ -22,8 +24,8 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.bottomNavigationView.setSelectedItemId(R.id.home);
         replaceFragment(new HomeFragment());
+        binding.bottomNavigationView.setSelectedItemId(R.id.home);
         binding.bottomNavigationView.setBackground(null);
 
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -64,9 +66,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void changeFabColor(boolean isHomeSelected) {
         if (isHomeSelected) {
-            binding.homeFabButton.setColorFilter(R.color.lavender, PorterDuff.Mode.SRC_IN);
+            //binding.homeFabButton.getDrawable().setTint(getResources().getColor(R.color.primary, getTheme()));
+            binding.homeFabButton.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryVariant, getTheme())));
         } else {
-            binding.homeFabButton.setColorFilter(R.color.black, PorterDuff.Mode.SRC_IN);
+            //binding.homeFabButton.setColorFilter(R.color.black, PorterDuff.Mode.SRC_IN);
+            binding.homeFabButton.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.textMenu, getTheme())));
         }
     }
 }

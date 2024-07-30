@@ -16,7 +16,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="@color/white"
+        android:background="@color/primary"
+        app:backgroundTint="@color/backgroundMenu"
         app:fabCradleMargin="15dp"
         app:fabCradleRoundedCornerRadius="80dp"
         app:fabCradleVerticalOffset="0dp">
@@ -27,6 +28,8 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
             android:background="@android:color/transparent"
+            app:itemIconTint="@color/menu_color_select"
+            app:itemTextColor="@color/menu_color_select"
             app:labelVisibilityMode="labeled"
             app:menu="@menu/bottom_menu" />
 
@@ -36,12 +39,12 @@
         android:id="@+id/homeFabButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="@color/backgroundMenu"
         android:src="@drawable/ic_baseline_home_24"
         app:borderWidth="0dp"
         app:fabCustomSize="60dp"
         app:layout_anchor="@id/bottomAppBar"
         app:maxImageSize="30dp"
-        app:tint="@color/lavender" />
+        app:tint="@color/primaryVariant" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
