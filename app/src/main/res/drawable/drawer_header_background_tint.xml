@@ -1,0 +1,8 @@
+<ripple xmlns:android="http://schemas.android.com/apk/res/android" android:color="@color/primary">
+    <item>
+        <bitmap
+            android:src="@drawable/drawer_header_background"
+            android:tint="@color/drawerMenuHeader"
+            android:tintMode="multiply" />
+    </item>
+</ripple>

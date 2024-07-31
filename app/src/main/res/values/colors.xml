@@ -3,11 +3,24 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <!--General use colors-->
     <color name="primary">@android:color/system_accent1_300</color>
     <color name="primaryVariant">@android:color/system_accent1_500</color>
     <color name="secondary">@android:color/system_accent2_300</color>
     <color name="secondaryVariant">@android:color/system_accent2_500</color>
-    <color name="textMenu">#FF000000</color>
-    <color name="backgroundMenu">#FFFFFFFF</color>
     <color name="backgroundFragment">@android:color/system_accent1_300</color>
-</resources>
+
+    <!--Bottom menu colors-->
+    <color name="bottomMenuBackground">#FFFFFFFF</color>
+    <color name="bottomMenuSelectedItem">@android:color/system_accent1_400</color>
+    <color name="bottomMenuUnselectedItem">#FF000000</color>
+
+    <!--Drawer side menu colors-->
+    <color name="drawerMenuSelectedItemBackground">@android:color/system_accent1_300</color>
+    <color name="drawerMenuSelectedText">@android:color/system_accent1_300</color>
+    <color name="drawerMenuUnselectedItemBackground">#F1F1F1</color>
+    <color name="drawerMenuUnselectedText">#FF000000</color>
+    <color name="drawerMenuItemSelectedBackground">@android:color/system_accent1_300</color>
+    <color name="drawerMenuBackground">#FFFFFFFF</color>
+    <color name="drawerMenuHeader">@android:color/system_accent1_300</color>
+    </resources>

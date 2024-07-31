@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Style to make the drawer menu's items rounded-->
+    <style name="DrawerMenuRoundedItems" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">15dp</item>
+    </style>
+
+    <!--Style to change the drawer menu's selected item background-->
+    <style name="DrawerMenuSelectedItemBackground">
+        <item name="colorPrimary">@color/drawerMenuItemSelectedBackground</item>
+    </style>
+</resources>
