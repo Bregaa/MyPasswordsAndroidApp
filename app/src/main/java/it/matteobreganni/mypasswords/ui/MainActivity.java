@@ -2,6 +2,7 @@ package it.matteobreganni.mypasswords.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
@@ -14,6 +15,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -49,6 +51,17 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
                 // TODO: if needed
+                binding.drawerLayout.closeDrawer(GravityCompat.START);
+                return true;
+            }
+        });
+
+        //Handles the drawer menu's "add account" button
+        MenuItem addButton = binding.drawerNavigationView.getMenu().findItem(R.id.addAccount);
+        addButton.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                showAddAccountDialog();
                 binding.drawerLayout.closeDrawer(GravityCompat.START);
                 return true;
             }
@@ -108,5 +121,24 @@ public class MainActivity extends AppCompatActivity {
             //binding.homeFabButton.setColorFilter(R.color.black, PorterDuff.Mode.SRC_IN);
             binding.homeFabButton.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.bottomMenuUnselectedItem, getTheme())));
         }
+    }
+
+    private void showAddAccountDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final View customLayout = getLayoutInflater().inflate(R.layout.popup_add_account, null);
+        builder.setView(customLayout);
+
+        AlertDialog dialog = builder.create();
+
+        Button submitButton = customLayout.findViewById(R.id.buttonSubmit);
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle submit button click
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 }

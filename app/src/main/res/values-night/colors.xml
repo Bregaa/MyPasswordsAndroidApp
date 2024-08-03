@@ -23,4 +23,10 @@
     <color name="drawerMenuItemSelectedBackground">@android:color/system_accent1_100</color>
     <color name="drawerMenuBackground">#131313</color>
     <color name="drawerMenuHeader">@android:color/system_accent1_600</color>
+
+    <!--Popup colors-->
+    <color name="popupBackground">#131313</color>
+    <color name="popupPrimary">@android:color/system_accent1_400</color>
+    <color name="popupSecondary">@android:color/system_accent2_400</color>
+    <color name="popupHintText">#7E7E7E</color>
 </resources>
