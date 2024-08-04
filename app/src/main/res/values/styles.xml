@@ -10,4 +10,14 @@
     <style name="DrawerMenuSelectedItemBackground">
         <item name="colorPrimary">@color/drawerMenuItemSelectedBackground</item>
     </style>
+
+    <!-- Drawer Menu Item Text Color -->
+    <style name="DrawerMenuTextStyle">
+        <item name="android:textColor">@color/drawer_menu_text_colors</item>
+    </style>
+
+    <!-- Drawer Menu Background Style -->
+    <style name="DrawerMenuBackgroundStyle">
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
 </resources>

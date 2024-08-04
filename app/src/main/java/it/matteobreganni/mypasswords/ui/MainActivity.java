@@ -9,18 +9,24 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
 import android.content.res.ColorStateList;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.List;
+
 import it.matteobreganni.mypasswords.R;
 import it.matteobreganni.mypasswords.databinding.ActivityMainBinding;
+import utils.FileHandlers;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         binding.drawerNavigationView.getMenu().getItem(0).setChecked(true);; // Set the default selected item of the drawer menu
         binding.bottomNavigationView.setSelectedItemId(R.id.home);  // Set the default selected item of the bottom menu
         binding.bottomNavigationView.setBackground(null);
+        initializeDrawerMenuAccountsList(this); // Initializes the drawer menu's items with the saved accounts
 
         /*Drawer menu initializations*/
         toggle = new ActionBarDrawerToggle(this, binding.drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);  // Links drawer to the action bar
@@ -49,8 +56,10 @@ public class MainActivity extends AppCompatActivity {
         binding.drawerNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int id = item.getItemId();
-                // TODO: if needed
+
+                TextView textView = findViewById(R.id.textView);
+                textView.setText(String.valueOf(item.getItemId()));
+
                 binding.drawerLayout.closeDrawer(GravityCompat.START);
                 return true;
             }
@@ -93,6 +102,8 @@ public class MainActivity extends AppCompatActivity {
                 binding.bottomNavigationView.setSelectedItemId(R.id.home);
             }
         });
+
+
     }
 
     // Handles the opening of the drawer menu
@@ -115,14 +126,13 @@ public class MainActivity extends AppCompatActivity {
     // Changes the color of the fab's drawable when selected / not selected, to be in sync with the bottom menu
     private void changeFabColor(boolean isHomeSelected) {
         if (isHomeSelected) {
-            //binding.homeFabButton.getDrawable().setTint(getResources().getColor(R.color.primary, getTheme()));
             binding.homeFabButton.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.bottomMenuSelectedItem, getTheme())));
         } else {
-            //binding.homeFabButton.setColorFilter(R.color.black, PorterDuff.Mode.SRC_IN);
             binding.homeFabButton.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.bottomMenuUnselectedItem, getTheme())));
         }
     }
 
+    // Shows the popup to add an account and manages it
     private void showAddAccountDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final View customLayout = getLayoutInflater().inflate(R.layout.popup_add_account, null);
@@ -130,15 +140,63 @@ public class MainActivity extends AppCompatActivity {
 
         AlertDialog dialog = builder.create();
 
-        Button submitButton = customLayout.findViewById(R.id.buttonSubmit);
+        Button submitButton = customLayout.findViewById(R.id.buttonSubmitNewAccount);
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle submit button click
-                dialog.dismiss();
+                // Handles the popup's new account submit button
+
+                EditText nameEditText = customLayout.findViewById(R.id.editTextAccountName);
+                EditText emailEditText = customLayout.findViewById(R.id.editTextAccountEmail);
+                String name = nameEditText.getText().toString().trim();
+                String email = emailEditText.getText().toString().trim();
+
+                if (email.isEmpty()) {  // Checks if the input is correct
+                    emailEditText.setError("Email cannot be empty");
+                } else {
+                    // Adds the account to the local files and to the drawer menu
+                    int fileHash = FileHandlers.addAccount(v.getContext(), name, email);
+                    if(fileHash != 0){
+                        String account;
+                        if(name.isEmpty()){
+                            account = email;
+                        }else{
+                            account = name;
+                        }
+                        Menu menu = binding.drawerNavigationView.getMenu();
+                        addAccountToDrawer(menu, fileHash, account, true);
+                    }
+                    dialog.dismiss();
+                }
+
             }
         });
 
         dialog.show();
     }
+
+    // Methods to add accounts to the drawer menu
+    private void initializeDrawerMenuAccountsList(Context context){
+        Menu menu = binding.drawerNavigationView.getMenu();
+
+        boolean first = false;
+        List<String[]> fileContent = FileHandlers.readFile(context, "accounts.txt");
+        for (String[] entry : fileContent) {
+            if(!first){
+                first = true;
+                addAccountToDrawer(menu, Integer.parseInt(entry[0]), entry[1], true);
+            }else{
+                addAccountToDrawer(menu, Integer.parseInt(entry[0]), entry[1], false);
+            }
+        }
+    }
+    private void addAccountToDrawer(Menu menu, int itemId, String itemName, boolean checked){
+        MenuItem newItem = menu.add(R.id.drawerGroup1, itemId, 0, itemName);
+        newItem.setCheckable(true);
+        if(checked){
+            newItem.setChecked(true);
+        }
+    }
+
+
 }
