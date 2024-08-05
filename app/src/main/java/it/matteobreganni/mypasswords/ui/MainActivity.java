@@ -26,6 +26,7 @@ import java.util.List;
 
 import it.matteobreganni.mypasswords.R;
 import it.matteobreganni.mypasswords.databinding.ActivityMainBinding;
+import utils.EncryptionHandlers;
 import utils.FileHandlers;
 
 public class MainActivity extends AppCompatActivity {
@@ -82,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.add:
                     replaceFragment(new AddFragment());
                     changeFabColor(false);
+                    EncryptionHandlers.encrypt("as");
                     break;
 
                 case R.id.search:
@@ -102,8 +104,6 @@ public class MainActivity extends AppCompatActivity {
                 binding.bottomNavigationView.setSelectedItemId(R.id.home);
             }
         });
-
-
     }
 
     // Handles the opening of the drawer menu
@@ -148,15 +148,20 @@ public class MainActivity extends AppCompatActivity {
 
                 EditText nameEditText = customLayout.findViewById(R.id.editTextAccountName);
                 EditText emailEditText = customLayout.findViewById(R.id.editTextAccountEmail);
+                EditText passwordEditText = customLayout.findViewById(R.id.editTextAccountPassword);
                 String name = nameEditText.getText().toString().trim();
                 String email = emailEditText.getText().toString().trim();
+                String password = passwordEditText.getText().toString().trim();
 
                 if (email.isEmpty()) {  // Checks if the input is correct
                     emailEditText.setError("Email cannot be empty");
+                } else if (password.isEmpty()){
+                    passwordEditText.setError("Password cannot be empty");
                 } else {
                     // Adds the account to the local files and to the drawer menu
-                    int fileHash = FileHandlers.addAccount(v.getContext(), name, email);
+                    int fileHash = FileHandlers.addAccount(v.getContext(), name, email, password);
                     if(fileHash != 0){
+                        // Decides the account's name
                         String account;
                         if(name.isEmpty()){
                             account = email;

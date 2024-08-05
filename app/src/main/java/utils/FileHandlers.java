@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileHandlers {
-    public static int addAccount(Context context, String name, String email){
+    public static int addAccount(Context context, String name, String email, String password){
         int emailHash = email.hashCode();
 
         // Selects the string to save the account as
@@ -26,18 +26,20 @@ public class FileHandlers {
         }else{
             account = name;
         }
+        // Encrypts the password
+        String encryptedPassword = EncryptionHandlers.encrypt(password);
 
         if(!fileExists(context, "accounts.txt")){
             // If accounts.txt doesn't exist
             createFileAndWriteLine(context, "accounts.txt", (String.valueOf(emailHash) + "," + account));
-            createFileAndWriteLine(context, (String.valueOf(emailHash) + ".txt"), null);
+            createFileAndWriteLine(context, (String.valueOf(emailHash) + ".txt"), encryptedPassword);
             return emailHash;
         }else{
             // If accounts.txt exists
             if(!fileExists(context, (String.valueOf(emailHash) + ".txt"))) {
                 // If the account's file doesn't exist
                 appendLine(context, "accounts.txt", (String.valueOf(emailHash) + "," + account));
-                createFileAndWriteLine(context, (String.valueOf(emailHash) + ".txt"), null);
+                createFileAndWriteLine(context, (String.valueOf(emailHash) + ".txt"), encryptedPassword);
                 return emailHash;
             }else{
                 // If the account's file exists

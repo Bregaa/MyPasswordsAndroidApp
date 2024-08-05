@@ -29,7 +29,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColorHint="@color/popupHintText"
-        android:hint="Email" />
+        android:hint="Email"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/editTextAccountPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColorHint="@color/popupHintText"
+        android:hint="Password"
+        android:inputType="textPassword" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -49,7 +58,30 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="The email isn't saved. A non-invertible hash is generated, to create different lists of used services for each account."
+            android:text="The email isn't stored. A non-invertible hash is generated, to create different lists of used services for each account."
+            android:textSize="14sp"
+            android:textColor="@color/popupSecondary" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
+
+        <ImageView
+            android:layout_width="20sp"
+            android:layout_height="20sp"
+            android:src="@android:drawable/ic_dialog_info"
+            android:contentDescription="Info Icon"
+            app:tint="@color/popupSecondary"
+            android:layout_marginEnd="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="The password isn't stored. A non-invertible hash is generated, to make sure that the next insertions are correct (to avoid generating a password with the wrong secret key)."
             android:textSize="14sp"
             android:textColor="@color/popupSecondary" />
     </LinearLayout>
