@@ -30,4 +30,7 @@
     <color name="popupSecondary">@android:color/system_accent2_300</color>
     <color name="popupHintText">#7E7E7E</color>
 
-    </resources>
+    <!-- Settings colors-->
+    <color name="settingsPrimary">@android:color/system_accent1_300</color>
+
+</resources>

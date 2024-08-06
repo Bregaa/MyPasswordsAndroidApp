@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
@@ -74,6 +75,19 @@ public class MainActivity extends AppCompatActivity {
                 showAddAccountDialog();
                 binding.drawerLayout.closeDrawer(GravityCompat.START);
                 return true;
+            }
+        });
+
+        //Handles the drawer menu's "settings" button
+        MaterialButton settingsButton = findViewById(R.id.settingsButton);
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.drawerLayout.closeDrawer(GravityCompat.START);
+
+                binding.bottomNavigationView.setSelectedItemId(R.id.home);
+                changeFabColor(false);
+                replaceFragment(new SettingsFragment());
             }
         });
 
