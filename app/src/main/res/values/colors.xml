@@ -9,6 +9,7 @@
     <color name="secondary">@android:color/system_accent2_300</color>
     <color name="secondaryVariant">@android:color/system_accent2_500</color>
     <color name="backgroundFragment">@android:color/system_accent1_300</color>
+    <color name="editTextLineColor">@android:color/black</color>
 
     <!--Bottom menu colors-->
     <color name="bottomMenuBackground">#FFFFFFFF</color>
@@ -32,5 +33,10 @@
 
     <!-- Settings colors-->
     <color name="settingsPrimary">@android:color/system_accent1_300</color>
+    <color name="accountItemBackgroundColor">#FFFFFFFF</color>
+    <color name="accountItemIconColor">@android:color/system_accent1_400</color>
+    <color name="editAccountDialogBackground">#FFFFFFFF</color>
+    <color name="editAccountDialogTitle">@android:color/system_accent1_300</color>
+    <color name="editAccountDialogConfirmButtonBackground">@android:color/system_accent1_300</color>
 
 </resources>

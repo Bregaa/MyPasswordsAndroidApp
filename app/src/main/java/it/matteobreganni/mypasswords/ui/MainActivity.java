@@ -12,7 +12,6 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -149,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
     // Shows the popup to add an account and manages it
     private void showAddAccountDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        final View customLayout = getLayoutInflater().inflate(R.layout.popup_add_account, null);
+        final View customLayout = getLayoutInflater().inflate(R.layout.dialog_add_account, null);
         builder.setView(customLayout);
 
         AlertDialog dialog = builder.create();
@@ -199,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
         Menu menu = binding.drawerNavigationView.getMenu();
 
         boolean first = false;
-        List<String[]> fileContent = FileHandlers.readFile(context, "accounts.txt");
+        List<String[]> fileContent = FileHandlers.readFileAndDivideLines(context, "accounts.txt");
         for (String[] entry : fileContent) {
             if(!first){
                 first = true;

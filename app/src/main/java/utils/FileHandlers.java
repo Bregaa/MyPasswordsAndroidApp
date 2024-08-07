@@ -93,14 +93,13 @@ public class FileHandlers {
         }
     }
 
-    public static List<String[]> readFile(Context context, String fileName) {
+    public static List<String[]> readFileAndDivideLines(Context context, String fileName) {
         List<String[]> contentList = new ArrayList<>();
         try {
             FileInputStream fis = context.openFileInput(fileName);
             BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
             String line;
             while ((line = reader.readLine()) != null) {
-                Log.d("asd", line);
                 String[] parts = line.split(",");
                 contentList.add(parts);
             }
@@ -110,4 +109,42 @@ public class FileHandlers {
         }
         return contentList;
     }
+
+    public static List<String> readFileLines(Context context, String fileName) {
+        List<String> lines = new ArrayList<>();
+        try {
+            FileInputStream fis = context.openFileInput(fileName);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                lines.add(line);
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return lines;
+    }
+
+    public static List<String> replaceNameInLines(List<String> lines, String oldName, String newName) {
+        List<String> modifiedLines = new ArrayList<>();
+        for (String line : lines) {
+            modifiedLines.add(line.replace(oldName, newName));
+        }
+        return modifiedLines;
+    }
+
+    public static void writeFileLines(Context context, String fileName, List<String> lines) {
+        try {
+            FileOutputStream fos = context.openFileOutput(fileName, Context.MODE_PRIVATE);
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fos));
+            for (String line : lines) {
+                writer.write(line + System.lineSeparator());
+            }
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

@@ -22,7 +22,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColorHint="@color/popupHintText"
-        android:hint="Name (optional)" />
+        android:hint="Name (optional)"
+        android:backgroundTint="@color/editTextLineColor"/>
 
     <EditText
         android:id="@+id/editTextAccountEmail"
@@ -30,7 +31,8 @@
         android:layout_height="wrap_content"
         android:textColorHint="@color/popupHintText"
         android:hint="Email"
-        android:inputType="textEmailAddress" />
+        android:inputType="textEmailAddress"
+        android:backgroundTint="@color/editTextLineColor" />
 
     <EditText
         android:id="@+id/editTextAccountPassword"
@@ -38,7 +40,8 @@
         android:layout_height="wrap_content"
         android:textColorHint="@color/popupHintText"
         android:hint="Password"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:backgroundTint="@color/editTextLineColor" />
 
     <LinearLayout
         android:layout_width="match_parent"

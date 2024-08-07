@@ -1,6 +1,5 @@
 package it.matteobreganni.mypasswords.ui;
 
-import android.accounts.Account;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,13 +45,14 @@ public class SettingsFragment extends Fragment {
         // Initialize the accounts list
         items = new ArrayList<>();
 
-        List<String[]> fileContent = FileHandlers.readFile(view.getContext(), "accounts.txt");
+        List<String[]> fileContent = FileHandlers.readFileAndDivideLines(view.getContext(), "accounts.txt");
         for (String[] entry : fileContent) {
             items.add(new AccountSettingsItem(entry[1]));
         }
 
         // Initialize the adapter and set it to the RecyclerView
-        adapter = new AccountsSettingsAdapter(items);
+        NavigationView navigationView = getActivity().findViewById(R.id.drawerNavigationView);
+        adapter = new AccountsSettingsAdapter(items, navigationView);
         recyclerView.setAdapter(adapter);
     }
 }
