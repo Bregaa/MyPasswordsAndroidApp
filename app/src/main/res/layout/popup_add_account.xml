@@ -58,7 +58,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="The email isn't stored. A non-invertible hash is generated, to create different lists of used services for each account."
+            android:text="If a name is chosen, the email isn't stored. A non-invertible hash is generated from the email, to create different lists of used services for each account."
             android:textSize="14sp"
             android:textColor="@color/popupSecondary" />
     </LinearLayout>
