@@ -53,7 +53,7 @@ public class AccountsSettingsAdapter extends RecyclerView.Adapter<AccountsSettin
             View dialogView = inflater.inflate(R.layout.dialog_edit_account_name, null);
 
             EditText editTextNewAccountName = dialogView.findViewById(R.id.editTextNewAccountName);
-            Button buttonConfirm = dialogView.findViewById(R.id.buttonConfirm);
+            Button buttonConfirm = dialogView.findViewById(R.id.editAccountNameButtonConfirm);
 
             // Sets the hint of the EditText as the previous name
             String oldName = holder.accountName.getText().toString();
@@ -76,10 +76,8 @@ public class AccountsSettingsAdapter extends RecyclerView.Adapter<AccountsSettin
                     List<String> newFileContent = new ArrayList<>();
                     boolean sameNameFound = false;
                     for (String[] entry : fileContent) {
-                        Log.d("asd", entry[1] + " " + newName);
                         if(entry[1].equals(newName)){
                             sameNameFound = true;
-                            Log.d("asd", "aaaaaa");
                         }
                         if(entry[1].equals(oldName)){
                             entry[1] = newName;
@@ -111,12 +109,109 @@ public class AccountsSettingsAdapter extends RecyclerView.Adapter<AccountsSettin
 
         // Check password button listener
         holder.checkAccountPasswordButton.setOnClickListener(v -> {
-            // Handle check button click
+            LayoutInflater inflater = LayoutInflater.from(v.getContext());
+            View dialogView = inflater.inflate(R.layout.dialog_check_password_account, null);
+
+            EditText editTextCheckAccountPassword = dialogView.findViewById(R.id.editTextCheckAccountPassword);
+            Button buttonConfirm = dialogView.findViewById(R.id.checkPasswordButtonConfirm);
+
+
+            AlertDialog dialog = new AlertDialog.Builder(v.getContext())
+                    .setView(dialogView)
+                    .setCancelable(true)
+                    .create();
+
+            // Confirm button listener
+            buttonConfirm.setOnClickListener(view -> {
+                String password = editTextCheckAccountPassword.getText().toString().trim();
+                if (password.isEmpty()) {  // Checks if the input is correct
+                    editTextCheckAccountPassword.setError("Password cannot be empty");
+                }
+                else{
+                    // Checks if the encrypted input password matches the saved one
+                    String encryptedPassword = EncryptionHandlers.encrypt(password);
+                    String accountName = holder.accountName.getText().toString();
+
+                    // Gets the account email's hash
+                    List<String[]> fileContent = FileHandlers.readFileAndDivideLines(v.getContext(), "accounts.txt");
+                    String accountEmailHash = null;
+                    for (String[] entry : fileContent) {
+                        if(entry[1].equals(accountName)){
+                            accountEmailHash = entry[0];
+                            break;
+                        }
+                    }
+                    if(accountEmailHash == null){
+                        Toast.makeText(view.getContext(), "Unexpected error retrieving the saved email's hash", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                    }else{
+                        List<String> accountFileContent = FileHandlers.readFileLines(view.getContext(), (accountEmailHash + ".txt"));
+                        String passwordHash = accountFileContent.get(0);
+                        if(passwordHash.equals(encryptedPassword)){
+                            Toast.makeText(view.getContext(), "The password is correct!", Toast.LENGTH_LONG).show();
+                        }else{
+                            Toast.makeText(view.getContext(), "The password is NOT correct!", Toast.LENGTH_LONG).show();
+                        }
+                        dialog.dismiss();
+                    }
+                }
+            });
+
+            dialog.show();
         });
 
         // Delete button listener
         holder.deleteAccountButton.setOnClickListener(v -> {
-            // Handle delete button click
+            LayoutInflater inflater = LayoutInflater.from(v.getContext());
+            View dialogView = inflater.inflate(R.layout.dialog_delete_account, null);
+
+            Button buttonConfirm = dialogView.findViewById(R.id.deleteAccountButtonConfirm);
+
+            AlertDialog dialog = new AlertDialog.Builder(v.getContext())
+                    .setView(dialogView)
+                    .setCancelable(true)
+                    .create();
+
+            // Confirm button listener
+            buttonConfirm.setOnClickListener(view -> {
+                // Deletes the account's line in accounts.txt and the account's file
+                String accountName = holder.accountName.getText().toString();
+
+                // Gets the account email's hash and deletes the account from accounts.txt
+                List<String[]> fileContent = FileHandlers.readFileAndDivideLines(v.getContext(), "accounts.txt");
+                List<String> newFileContent = new ArrayList<>();
+                String accountEmailHash = null;
+                for (String[] entry : fileContent) {
+                    if(!entry[1].equals(accountName)){
+                        accountEmailHash = entry[0];
+                        newFileContent.add(entry[0] + "," + entry[1]);
+                    }
+                }
+                FileHandlers.writeFileLines(view.getContext(), "accounts.txt", newFileContent);
+
+                // Deletes account's file
+                if(accountEmailHash == null){
+                    Toast.makeText(view.getContext(), "Unexpected error retrieving the saved email's hash", Toast.LENGTH_SHORT).show();
+                }else{
+                    boolean accountDeleted = FileHandlers.deleteFile(view.getContext(), (accountEmailHash + ".txt"));
+                    if(accountDeleted){
+                        Toast.makeText(view.getContext(), "Account deleted!", Toast.LENGTH_LONG).show();
+                    }else{
+                        Toast.makeText(view.getContext(), "There was an error, account partially deleted.", Toast.LENGTH_LONG).show();
+                    }
+
+                    // Removes the account from the settings fragment and from the drawer's menu
+                    Menu menu = navigationView.getMenu();
+                    menu.removeItem(Integer.parseInt(accountEmailHash));
+                    items.remove(position);
+                    notifyItemRemoved(position);
+                    notifyItemRangeChanged(position, items.size());
+                }
+
+                dialog.dismiss();
+            });
+
+            dialog.show();
         });
     }
 

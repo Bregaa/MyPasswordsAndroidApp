@@ -4,14 +4,14 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="@color/editAccountDialogBackground">
+    android:background="@color/dialogBackground">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Change account's name"
         android:textSize="25sp"
-        android:textColor="@color/editAccountDialogTitle"
+        android:textColor="@color/dialogTitle"
         android:textAlignment="center"
         android:textStyle="bold"
         android:padding="6dp"/>
@@ -22,13 +22,14 @@
         android:layout_height="wrap_content"
         android:hint="New name"
         android:layout_marginVertical="10dp"
+        android:textColorHint="@color/dialogHintText"
         android:backgroundTint="@color/editTextLineColor"/>
 
     <Button
-        android:id="@+id/buttonConfirm"
+        android:id="@+id/editAccountNameButtonConfirm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Confirm"
-        android:backgroundTint="@color/editAccountDialogConfirmButtonBackground"
+        android:backgroundTint="@color/dialogConfirmButtonBackground"
         android:padding="6dp"/>
 </LinearLayout>

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/popupBackground"
+    android:background="@color/dialogBackground"
     android:padding="20dp">
 
     <TextView
@@ -13,7 +13,7 @@
         android:textSize="30sp"
         android:text="New account:"
         android:textStyle="bold"
-        android:textColor="@color/popupPrimary"
+        android:textColor="@color/dialogTitle"
         android:layout_marginBottom="10dp"
         android:layout_gravity="center" />
 
@@ -21,7 +21,7 @@
         android:id="@+id/editTextAccountName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColorHint="@color/popupHintText"
+        android:textColorHint="@color/dialogHintText"
         android:hint="Name (optional)"
         android:backgroundTint="@color/editTextLineColor"/>
 
@@ -29,7 +29,7 @@
         android:id="@+id/editTextAccountEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColorHint="@color/popupHintText"
+        android:textColorHint="@color/dialogHintText"
         android:hint="Email"
         android:inputType="textEmailAddress"
         android:backgroundTint="@color/editTextLineColor" />
@@ -38,7 +38,7 @@
         android:id="@+id/editTextAccountPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColorHint="@color/popupHintText"
+        android:textColorHint="@color/dialogHintText"
         android:hint="Password"
         android:inputType="textPassword"
         android:backgroundTint="@color/editTextLineColor" />
@@ -55,7 +55,7 @@
             android:layout_height="20sp"
             android:src="@android:drawable/ic_dialog_info"
             android:contentDescription="Info Icon"
-            app:tint="@color/popupSecondary"
+            app:tint="@color/dialogInfo"
             android:layout_marginEnd="10dp" />
 
         <TextView
@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:text="If a name is chosen, the email isn't stored. A non-invertible hash is generated from the email, to create different lists of used services for each account."
             android:textSize="14sp"
-            android:textColor="@color/popupSecondary" />
+            android:textColor="@color/dialogInfo" />
     </LinearLayout>
 
     <LinearLayout
@@ -78,7 +78,7 @@
             android:layout_height="20sp"
             android:src="@android:drawable/ic_dialog_info"
             android:contentDescription="Info Icon"
-            app:tint="@color/popupSecondary"
+            app:tint="@color/dialogInfo"
             android:layout_marginEnd="10dp" />
 
         <TextView
@@ -86,7 +86,7 @@
             android:layout_height="wrap_content"
             android:text="The password isn't stored. A non-invertible hash is generated, to make sure that the next insertions are correct (to avoid generating a password with the wrong secret key)."
             android:textSize="14sp"
-            android:textColor="@color/popupSecondary" />
+            android:textColor="@color/dialogInfo" />
     </LinearLayout>
 
     <Button
@@ -94,7 +94,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add account"
-        android:backgroundTint="@color/popupPrimary"
+        android:backgroundTint="@color/dialogConfirmButtonBackground"
         android:layout_gravity="center"/>
 
 </LinearLayout>

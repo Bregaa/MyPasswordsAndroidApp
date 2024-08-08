@@ -147,4 +147,13 @@ public class FileHandlers {
         }
     }
 
+    public static boolean deleteFile(Context context, String fileName) {
+        File file = new File(context.getFilesDir(), fileName);
+        if (file.exists()) {
+            return file.delete();
+        } else {
+            Log.e("FileHandlers", "File not found: " + fileName);
+            return false;
+        }
+    }
 }

@@ -25,18 +25,17 @@
     <color name="drawerMenuBackground">#131313</color>
     <color name="drawerMenuHeader">@android:color/system_accent1_600</color>
 
-    <!--Popup colors-->
-    <color name="popupBackground">#131313</color>
-    <color name="popupPrimary">@android:color/system_accent1_400</color>
-    <color name="popupSecondary">@android:color/system_accent2_400</color>
-    <color name="popupHintText">#7E7E7E</color>
+    <!--Dialog colors-->
+    <color name="dialogBackground">#131313</color>
+    <color name="dialogTitle">#FFFFFFFF</color>
+    <color name="dialogConfirmButtonBackground">@android:color/system_accent1_400</color>
+    <color name="dialogHintText">#7E7E7E</color>
+    <color name="dialogInfo">@android:color/system_accent2_400</color>
 
     <!-- Settings colors-->
     <color name="settingsPrimary">@android:color/system_accent1_300</color>
     <color name="accountItemBackgroundColor">#131313</color>
     <color name="accountItemIconColor">@android:color/system_accent1_400</color>
-    <color name="editAccountDialogBackground">#131313</color>
-    <color name="editAccountDialogTitle">#FFFFFFFF</color>
-    <color name="editAccountDialogConfirmButtonBackground">@android:color/system_accent1_400</color>
+
 
 </resources>
