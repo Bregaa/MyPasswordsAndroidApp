@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.navigation.NavigationView;
@@ -171,20 +172,38 @@ public class MainActivity extends AppCompatActivity {
                 } else if (password.isEmpty()){
                     passwordEditText.setError("Password cannot be empty");
                 } else {
-                    // Adds the account to the local files and to the drawer menu
-                    int fileHash = FileHandlers.addAccount(v.getContext(), name, email, password);
-                    if(fileHash != 0){
-                        // Decides the account's name
-                        String account;
-                        if(name.isEmpty()){
-                            account = email;
-                        }else{
-                            account = name;
-                        }
-                        Menu menu = binding.drawerNavigationView.getMenu();
-                        addAccountToDrawer(menu, fileHash, account, true);
+                    // Decides the account's name
+                    String account;
+                    if(name.isEmpty()){
+                        account = email;
+                    }else{
+                        account = name;
                     }
-                    dialog.dismiss();
+
+                    // Checks if there is an account with the same name
+                    boolean isModified = false;
+                    List<String[]> fileContent = FileHandlers.readFileAndDivideLines(v.getContext(), "accounts.txt");
+                    for (String[] entry : fileContent) {
+                        if(entry[1].equals(account)){
+                            isModified = true;
+                        }
+                    }
+                    if(isModified){
+                        if(name.isEmpty()){
+                            emailEditText.setError("An account with same name exists.");
+                        }else{
+                            nameEditText.setError("An account with same name exists.");
+                        }
+                    }else{
+                        // Adds the account to the local files and to the drawer menu
+                        int fileHash = FileHandlers.addAccount(v.getContext(), name, email, password);
+                        if(fileHash != 0){
+                            Menu menu = binding.drawerNavigationView.getMenu();
+                            addAccountToDrawer(menu, fileHash, account, true);
+                        }
+                        dialog.dismiss();
+                        Toast.makeText(MainActivity.this, "Account added!", Toast.LENGTH_SHORT).show();
+                    }
                 }
 
             }

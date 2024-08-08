@@ -1,6 +1,7 @@
 package utils;
 
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -17,9 +19,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import it.matteobreganni.mypasswords.R;
+import it.matteobreganni.mypasswords.ui.MainActivity;
 
 public class AccountsSettingsAdapter extends RecyclerView.Adapter<AccountsSettingsAdapter.ViewHolder> {
 
@@ -67,22 +71,39 @@ public class AccountsSettingsAdapter extends RecyclerView.Adapter<AccountsSettin
                     editTextNewAccountName.setError("New name cannot be empty");
                 }
                 else{
-                    // Changes the name in the accounts.txt file
-                    FileHandlers.writeFileLines(view.getContext(), "accounts.txt",
-                            FileHandlers.replaceNameInLines(
-                            FileHandlers.readFileLines(view.getContext(), "accounts.txt"), oldName, newName)
-                    );
-
-                    //Changes the name in the settings fragment and in the drawer menu
-                    holder.accountName.setText(newName);
-                    Menu menu = navigationView.getMenu();
-                    MenuItem itemToUpdate = findMenuItemByName(menu, oldName);
-                    if (itemToUpdate != null) {
-                        itemToUpdate.setTitle(newName);
+                    // Checks if there is an account with the same name
+                    List<String[]> fileContent = FileHandlers.readFileAndDivideLines(v.getContext(), "accounts.txt");
+                    List<String> newFileContent = new ArrayList<>();
+                    boolean sameNameFound = false;
+                    for (String[] entry : fileContent) {
+                        Log.d("asd", entry[1] + " " + newName);
+                        if(entry[1].equals(newName)){
+                            sameNameFound = true;
+                            Log.d("asd", "aaaaaa");
+                        }
+                        if(entry[1].equals(oldName)){
+                            entry[1] = newName;
+                        }
+                        newFileContent.add(entry[0] + "," + entry[1]);
                     }
 
-                    dialog.dismiss();
-                }
+                    if(sameNameFound){
+                        editTextNewAccountName.setError("An account with same name exists.");
+                    }else{
+                        // Overwrites accounts.txt with the new name
+                        FileHandlers.writeFileLines(view.getContext(), "accounts.txt", newFileContent);
+
+                        //Changes the name in the settings fragment and in the drawer menu
+                        holder.accountName.setText(newName);
+                        Menu menu = navigationView.getMenu();
+                        MenuItem itemToUpdate = findMenuItemByName(menu, oldName);
+                        if (itemToUpdate != null) {
+                            itemToUpdate.setTitle(newName);
+                        }
+
+                        dialog.dismiss();
+                        Toast.makeText(view.getContext(), "Account name changed!", Toast.LENGTH_SHORT).show();
+                    }             }
             });
 
             dialog.show();
