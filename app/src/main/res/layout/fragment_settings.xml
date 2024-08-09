@@ -18,7 +18,7 @@
             android:layout_gravity="center_horizontal"
             android:padding="15dp"
             android:text="Accounts settings"
-            android:textColor="@color/white"
+            android:textColor="@color/settingsPrimary"
             android:textSize="40sp"
             android:textStyle="bold" />
 

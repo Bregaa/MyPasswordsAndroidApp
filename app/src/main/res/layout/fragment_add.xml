@@ -1,18 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
     android:background="@color/backgroundFragment"
     tools:context=".ui.AddFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <!-- CardView to group UI elements with rounded background -->
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Add"
-        android:gravity="center"
-        android:textSize="30dp"
-        android:textColor="@color/white"/>
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/fragmentCardViewBackground"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="4dp">
 
-</FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Generate password"
+                android:textSize="35sp"
+                android:textColor="@color/fragmentTitle"
+                android:textAlignment="center"
+                android:layout_marginBottom="18dp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/editTextServiceNameAddPassword"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:hint="Service name..."
+                android:layout_gravity="center"
+                android:textColorHint="@color/fragmentHintText"
+                android:backgroundTint="@color/fragmentEditTextLineColor" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                android:id="@+id/warningSection"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp">
+
+                <ImageView
+                    android:layout_width="20sp"
+                    android:layout_height="20sp"
+                    android:src="@android:drawable/stat_sys_warning"
+                    android:contentDescription="Info Icon"
+                    app:tint="@color/fragmentWarning"
+                    android:layout_marginEnd="10dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Similar service used before found (list of services)! It's recommended to switch to the 'search' function to not misspell the service."
+                    android:textSize="14sp"
+                    android:textColor="@color/fragmentWarning" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/buttonGeneratePassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Generate"
+                android:textSize="15sp"
+                android:layout_gravity="center_horizontal"
+                android:padding="12dp"
+                android:layout_margin="5dp"
+                android:backgroundTint="@color/fragmentButtonBackground"
+                android:textColor="@color/fragmentButtonText"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/fragmentCardViewBackground"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="4dp"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:id="@+id/generatedPasswordSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Service*'s password:"
+                android:textSize="25sp"
+                android:textColor="@color/fragmentTitle"
+                android:textAlignment="center"
+                android:layout_marginBottom="18dp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center_horizontal">
+
+                <TextView
+                    android:id="@+id/textViewGeneratedPassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="***************"
+                    android:textSize="25sp"
+                    android:layout_marginEnd="8dp"
+                    android:textColor="@color/fragmentTextColor" />
+
+                <ImageButton
+                    android:id="@+id/buttonShowPassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:src="@drawable/ic_baseline_remove_red_eye_24"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:padding="7dp"
+                    app:tint="@color/fragmentTextIcon"/>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/buttonCopyPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Copy password"
+                android:layout_gravity="center_horizontal"
+                android:backgroundTint="@color/fragmentButtonBackground"
+                android:textColor="@color/fragmentButtonText" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <Button
+        android:id="@+id/buttonAddAliases"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:text="Add aliases"
+        android:layout_gravity="center_horizontal"
+        android:backgroundTint="@color/fragmentButton2Background"
+        android:textColor="@color/fragmentButton2Text" />
+</LinearLayout>

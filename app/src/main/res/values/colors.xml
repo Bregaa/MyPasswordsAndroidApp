@@ -37,5 +37,16 @@
     <color name="accountItemBackgroundColor">#FFFFFFFF</color>
     <color name="accountItemIconColor">@android:color/system_accent1_400</color>
 
-
+    <!-- Fragments colors-->
+    <color name="fragmentTitle">@android:color/system_accent1_300</color>
+    <color name="fragmentTextColor">@android:color/system_accent1_400</color>
+    <color name="fragmentHintText">#7E7E7E</color>
+    <color name="fragmentEditTextLineColor">@android:color/system_accent1_300</color>
+    <color name="fragmentButtonBackground">@android:color/system_accent1_300</color>
+    <color name="fragmentButtonText">#FFFFFFFF</color>
+    <color name="fragmentButton2Background">#FFFFFFFF</color>
+    <color name="fragmentButton2Text">@android:color/system_accent1_300</color>
+    <color name="fragmentWarning">@android:color/system_accent2_300</color>
+    <color name="fragmentTextIcon">@android:color/system_accent1_300</color>
+    <color name="fragmentCardViewBackground">#FFFFFFFF</color>
 </resources>

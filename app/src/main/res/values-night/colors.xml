@@ -27,7 +27,7 @@
 
     <!--Dialog colors-->
     <color name="dialogBackground">#131313</color>
-    <color name="dialogTitle">#FFFFFFFF</color>
+    <color name="dialogTitle">@android:color/system_accent1_400</color>
     <color name="dialogConfirmButtonBackground">@android:color/system_accent1_400</color>
     <color name="dialogHintText">#7E7E7E</color>
     <color name="dialogInfo">@android:color/system_accent2_400</color>
@@ -37,5 +37,15 @@
     <color name="accountItemBackgroundColor">#131313</color>
     <color name="accountItemIconColor">@android:color/system_accent1_400</color>
 
-
+    <!-- Fragments colors-->
+    <color name="fragmentTitle">@android:color/system_accent1_400</color>
+    <color name="fragmentTextColor">@android:color/system_accent1_400</color>
+    <color name="fragmentHintText">#7E7E7E</color>
+    <color name="fragmentEditTextLineColor">@android:color/system_accent1_300</color>
+    <color name="fragmentButtonBackground">@android:color/system_accent1_400</color>
+    <color name="fragmentButtonText">#FF000000</color>
+    <color name="fragmentButton2Background">#131313</color>
+    <color name="fragmentButton2Text">@android:color/system_accent1_300</color>
+    <color name="fragmentWarning">@android:color/system_accent2_300</color>
+    <color name="fragmentCardViewBackground">#131313</color>
 </resources>
