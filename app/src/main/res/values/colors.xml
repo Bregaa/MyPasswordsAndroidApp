@@ -33,7 +33,7 @@
     <color name="dialogInfo">@android:color/system_accent2_300</color>
 
     <!-- Settings colors-->
-    <color name="settingsPrimary">@android:color/system_accent1_300</color>
+    <color name="settingsPrimary">#FFFFFFFF</color>
     <color name="accountItemBackgroundColor">#FFFFFFFF</color>
     <color name="accountItemIconColor">@android:color/system_accent1_400</color>
 
