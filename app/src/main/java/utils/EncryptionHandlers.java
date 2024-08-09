@@ -15,6 +15,10 @@ public class EncryptionHandlers {
     private static Pattern numberPattern = Pattern.compile("\\d");
     private static Pattern symbolPattern = Pattern.compile("[+/-]");
 
+    public static String generatePassword(String emailHash, String service){
+        return encrypt(emailHash + service);
+    }
+
     public static String encrypt(String string){
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-224");

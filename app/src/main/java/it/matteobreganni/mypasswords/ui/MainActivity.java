@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         /*Setting default stuff*/
-        replaceFragment(new HomeFragment());    // Set the default fragment
+        replaceFragment(new HomeFragment(), "HomeFragment");    // Set the default fragment
         binding.drawerNavigationView.getMenu().getItem(0).setChecked(true);; // Set the default selected item of the drawer menu
         binding.bottomNavigationView.setSelectedItemId(R.id.home);  // Set the default selected item of the bottom menu
         binding.bottomNavigationView.setBackground(null);
@@ -60,7 +60,20 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                 TextView textView = findViewById(R.id.textView);
-                textView.setText(String.valueOf(item.getItemId()));
+                if(textView != null){
+                    textView.setText(String.valueOf(item.getItemId()));
+                }
+
+                // Check if the fragment "fragment_add" is currently being shown
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                Fragment fragment = fragmentManager.findFragmentByTag("AddFragment");
+                if (fragment != null && fragment.isVisible()) {
+                    // Find the TextView within the fragment and update its text
+                    TextView textViewGeneratePasswordAccountName = fragment.getView().findViewById(R.id.textViewGeneratePasswordAccountName);
+                    if (textViewGeneratePasswordAccountName != null) {
+                        textViewGeneratePasswordAccountName.setText("for " + item.getTitle());
+                    }
+                }
 
                 binding.drawerLayout.closeDrawer(GravityCompat.START);
                 return true;
@@ -87,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
                 binding.bottomNavigationView.setSelectedItemId(R.id.home);
                 changeFabColor(false);
-                replaceFragment(new SettingsFragment());
+                replaceFragment(new SettingsFragment(), "SettingsFragment");
             }
         });
 
@@ -95,18 +108,18 @@ public class MainActivity extends AppCompatActivity {
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             switch (item.getItemId()){
                 case R.id.add:
-                    replaceFragment(new AddFragment());
+                    replaceFragment(new AddFragment(), "AddFragment");
                     changeFabColor(false);
                     EncryptionHandlers.encrypt("as");
                     break;
 
                 case R.id.search:
-                    replaceFragment(new SearchFragment());
+                    replaceFragment(new SearchFragment(), "SearchFragment");
                     changeFabColor(false);
                     break;
 
                 case R.id.home:
-                    replaceFragment(new HomeFragment());
+                    replaceFragment(new HomeFragment(), "HomeFragment");
                     changeFabColor(true);
                     break;
             }
@@ -130,10 +143,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Replaces the fragment
-    private void replaceFragment(Fragment fragment){
+    private void replaceFragment(Fragment fragment, String fragmentName){
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frame_layout, fragment);
+        fragmentTransaction.replace(R.id.frame_layout, fragment, fragmentName);
         fragmentTransaction.commit();
     }
 
