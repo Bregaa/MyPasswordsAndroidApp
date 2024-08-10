@@ -7,6 +7,7 @@
     android:orientation="vertical"
     android:padding="16dp"
     android:background="@color/backgroundFragment"
+    android:id="@+id/addFragment"
     tools:context=".ui.AddFragment">
 
     <!-- CardView to group UI elements with rounded background -->
@@ -57,7 +58,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="visible"
-                android:id="@+id/warningSection"
+                android:id="@+id/generatePasswordWarningSection"
                 android:orientation="horizontal"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp">
@@ -73,6 +74,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/generatePasswordWarningText"
                     android:text="Similar service used before found (list of services)! It's recommended to switch to the 'search' function to not misspell the service."
                     android:textSize="14sp"
                     android:textColor="@color/fragmentWarning" />

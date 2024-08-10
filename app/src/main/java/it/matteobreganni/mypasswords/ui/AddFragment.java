@@ -1,6 +1,11 @@
 package it.matteobreganni.mypasswords.ui;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -8,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +45,12 @@ public class AddFragment extends Fragment {
     private TextView textViewGeneratedPasswordHidden;
     private TextView textViewGeneratedPasswordShown;
     private CardView generatedPasswordSection;
+    private LinearLayout generatePasswordWarningSection;
+    private TextView generatePasswordWarningText;
+
+    private int selectedAccountHash;
+    private List<String[]> fileAccountContent;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,13 +69,62 @@ public class AddFragment extends Fragment {
         textViewGeneratedPasswordHidden = rootView.findViewById(R.id.textViewGeneratedPasswordHidden);
         textViewGeneratedPasswordShown = rootView.findViewById(R.id.textViewGeneratedPasswordShown);
         generatedPasswordSection = rootView.findViewById(R.id.generatedPasswordSection);
+        generatePasswordWarningSection = rootView.findViewById(R.id.generatePasswordWarningSection);
+        generatePasswordWarningText = rootView.findViewById(R.id.generatePasswordWarningText);
 
         NavigationView navigationView = getActivity().findViewById(R.id.drawerNavigationView);
         Menu menu = navigationView.getMenu();
         String selectedAccountName = findSelectedMenuItemNameInGroup(menu, R.id.drawerGroup1);
         textViewGeneratePasswordAccountName.setText("for " + selectedAccountName);
 
-        // Set onClickListeners for each button
+        selectedAccountHash = findSelectedMenuItemIdInGroup(menu, R.id.drawerGroup1);
+        fileAccountContent = FileHandlers.readFileAndDivideLines(getContext(), selectedAccountHash + ".txt");
+
+
+        editTextServiceName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Nothing
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String serviceName = s.toString();
+                List<String> similarServices = new ArrayList<>();
+                if(serviceName.length() > 1){
+                    for (int i = 1; i < fileAccountContent.size(); i++) {
+                        String[] line = fileAccountContent.get(i);
+                        for (String str : line) {
+                            if(editDistance(serviceName, str) <= 2){
+                                similarServices.add(str);
+                            }
+                        }
+                    }
+
+                    if(similarServices.size() != 0){
+                        String servicesConcatenated = similarServices.get(0);
+                        for (int i = 1; i < similarServices.size(); i++) {
+                            servicesConcatenated += ", " + similarServices.get(i);
+                        }
+                        generatePasswordWarningText.setText("Similar services used before found ("+ servicesConcatenated + ")! " +
+                                "It's recommended to switch to the 'search' function to not misspell the service."
+                        );
+                        generatePasswordWarningSection.setVisibility(View.VISIBLE);
+                    }else{
+                        generatePasswordWarningSection.setVisibility(View.GONE);
+                    }
+                }else{
+                    generatePasswordWarningSection.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Nothing
+            }
+        });
+
+
         buttonGeneratePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,9 +171,10 @@ public class AddFragment extends Fragment {
                             // Adds the service to the account's list of services
                             List<String> fileContentLines = FileHandlers.readFileLines(v.getContext(), (accountHash + ".txt"));
                             fileContentLines.add(serviceName);
+                            fileAccountContent.add(new String[] { serviceName });
                             FileHandlers.writeFileLines(v.getContext(), accountHash + ".txt", fileContentLines);
 
-                            Toast.makeText(v.getContext(), serviceName + "'s password generated!", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(v.getContext(), serviceName + "'s password generated!", Toast.LENGTH_SHORT).show();
                             textViewGeneratedPasswordTitle.setText(serviceName + "'s password:");
                             generatedPasswordSection.setVisibility(View.VISIBLE);
                             buttonAddAliases.setVisibility(View.VISIBLE);
@@ -147,8 +209,10 @@ public class AddFragment extends Fragment {
         buttonCopyPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle copying password logic here
-                Toast.makeText(getActivity(), "Password copied to clipboard", Toast.LENGTH_SHORT).show();
+                ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("Password", textViewGeneratedPasswordShown.getText().toString());
+                clipboard.setPrimaryClip(clip);
+                //Toast.makeText(getActivity(), "Password copied to clipboard", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -211,4 +275,38 @@ public class AddFragment extends Fragment {
         }
         return -1;
     }
+
+    // Checks the edit distance between two strings
+    public int editDistance(String s1, String s2) {
+        return levenshteinDistance(s1, s2);
+    }
+    public int levenshteinDistance(String s1, String s2) {
+        int len1 = s1.length();
+        int len2 = s2.length();
+
+        int[][] dp = new int[len1 + 1][len2 + 1];
+
+        for (int i = 0; i <= len1; i++) {
+            dp[i][0] = i;
+        }
+        for (int j = 0; j <= len2; j++) {
+            dp[0][j] = j;
+        }
+
+        for (int i = 1; i <= len1; i++) {
+            for (int j = 1; j <= len2; j++) {
+                if (s1.charAt(i - 1) == s2.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1];
+                } else {
+                    dp[i][j] = 1 + Math.min(dp[i - 1][j - 1],
+                            Math.min(dp[i - 1][j], dp[i][j - 1]));
+                }
+            }
+        }
+
+        return dp[len1][len2];
+    }
+
+
+
 }

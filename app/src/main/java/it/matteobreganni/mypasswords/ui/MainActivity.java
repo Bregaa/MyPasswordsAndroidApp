@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -73,6 +74,12 @@ public class MainActivity extends AppCompatActivity {
                     if (textViewGeneratePasswordAccountName != null) {
                         textViewGeneratePasswordAccountName.setText("for " + item.getTitle());
                     }
+                    EditText serviceNameEditText = fragment.getView().findViewById(R.id.editTextServiceName);
+                    serviceNameEditText.setText("");
+                    CardView generatedPasswordArea = fragment.getView().findViewById(R.id.generatedPasswordSection);
+                    generatedPasswordArea.setVisibility(View.GONE);
+                    Button aliasesButton = fragment.getView().findViewById(R.id.buttonAddAliases);
+                    aliasesButton.setVisibility(View.GONE);
                 }
 
                 binding.drawerLayout.closeDrawer(GravityCompat.START);
