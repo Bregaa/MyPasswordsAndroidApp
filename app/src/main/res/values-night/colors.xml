@@ -31,6 +31,8 @@
     <color name="dialogConfirmButtonBackground">@android:color/system_accent1_400</color>
     <color name="dialogHintText">#7E7E7E</color>
     <color name="dialogInfo">@android:color/system_accent2_400</color>
+    <color name="dialogItemBackground">#FF000000</color>
+    <color name="dialogItemText">#FFFFFFFF</color>
 
     <!-- Settings colors-->
     <color name="settingsPrimary">@android:color/system_accent1_300</color>

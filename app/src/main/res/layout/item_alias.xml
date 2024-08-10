@@ -6,7 +6,7 @@
     android:layout_margin="5dp"
     app:cardCornerRadius="12dp"
     app:cardElevation="4dp"
-    android:backgroundTint="@color/white"
+    android:backgroundTint="@color/dialogItemBackground"
     android:padding="0dp">
 
     <LinearLayout
@@ -23,7 +23,7 @@
             android:layout_weight="1"
             android:text="Alias"
             android:textSize="16sp"
-            android:textColor="@color/black"
+            android:textColor="@color/dialogItemText"
             android:padding="8dp" />
 
         <ImageButton

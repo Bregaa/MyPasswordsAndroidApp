@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -89,9 +90,17 @@ public class AddFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // If the saved file is from a different account, get the right file (the file's content is saved in a variable to not read the file every time)
+                if(findSelectedMenuItemIdInGroup(menu, R.id.drawerGroup1) != selectedAccountHash){
+                    selectedAccountHash = findSelectedMenuItemIdInGroup(menu, R.id.drawerGroup1);
+                    fileAccountContent = FileHandlers.readFileAndDivideLines(getContext(), selectedAccountHash + ".txt");
+                }
+
                 String serviceName = s.toString();
                 List<String> similarServices = new ArrayList<>();
+                // If the input text is longer than 1 character
                 if(serviceName.length() > 1){
+                    // Creates a list of services with edit distance <= 2 compared to the input text
                     for (int i = 1; i < fileAccountContent.size(); i++) {
                         String[] line = fileAccountContent.get(i);
                         for (String str : line) {
@@ -101,7 +110,9 @@ public class AddFragment extends Fragment {
                         }
                     }
 
+                    // If similar service names were found
                     if(similarServices.size() != 0){
+                        // Concatenates teh service names to be shown in the warning text
                         String servicesConcatenated = similarServices.get(0);
                         for (int i = 1; i < similarServices.size(); i++) {
                             servicesConcatenated += ", " + similarServices.get(i);
@@ -129,10 +140,7 @@ public class AddFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Gets input service
-                String serviceName = editTextServiceName.getText().toString().trim()
-                        .toLowerCase()
-                        .replaceAll("\\s+", "")
-                        .replace(",", "");
+                String serviceName = serviceNameToStandard(editTextServiceName.getText().toString());
 
                 if(serviceName.isEmpty()){
                     editTextServiceName.setError("Service name cannot be empty");
@@ -144,29 +152,27 @@ public class AddFragment extends Fragment {
                     if(accountHash == -1){
                         Toast.makeText(v.getContext(), "Unexpected error getting the selected account", Toast.LENGTH_SHORT).show();
                     }else{
+                        // Checks if the service name has already been used
                         boolean sameServiceFound = false;
                         List<String[]> fileContent = FileHandlers.readFileAndDivideLines(v.getContext(), accountHash + ".txt");
-                        for (int i = 1; i < fileContent.size(); i++) {  // Skipping the first line since that's the encrypted password
-                            String[] line = fileContent.get(i);
-                            // Check if the first item (main service name) in the line equals the service
-                            if (line.length > 0 && line[0].equals(serviceName)) {
+                        if(serviceExists(fileContent, serviceName)){
+                            sameServiceFound = true;
+                            editTextServiceName.setError("Service name already used. Switch to the 'search' page!");
+                            Toast.makeText(v.getContext(), "Service name already used. Switch to the 'search' page!"
+                                    , Toast.LENGTH_LONG).show();
+                        }else{
+                            String serviceFromAlias = findServiceFromAlias(fileContent, serviceName);
+                            if(!serviceFromAlias.equals("")){
                                 sameServiceFound = true;
-                                editTextServiceName.setError("Service name already used. Switch to the 'search' page!");
-                                Toast.makeText(v.getContext(), "Service name already used. Switch to the 'search' page!"
+                                editTextServiceName.setError("Service name already used as alias of the service '"
+                                        + serviceFromAlias + "'. Remove the alias through the search page or use a different name.");
+                                Toast.makeText(v.getContext(), "Service name already used as alias of the service '"
+                                                + serviceFromAlias + "'. Remove the alias through the search page or use a different name."
                                         , Toast.LENGTH_LONG).show();
                             }
-                            // Checks if one of the aliases is equal to the service
-                            for (int j = 1; j < line.length; j++) { // Skips the main service index 0
-                                if (line[j].equals(serviceName)) {
-                                    sameServiceFound = true;
-                                    editTextServiceName.setError("Service name already used as alias of the service '"
-                                            + line[0] + "'. Remove the alias through the search page or use a different name.");
-                                    Toast.makeText(v.getContext(), "Service name already used as alias of the service '"
-                                            + line[0] + "'. Remove the alias through the search page or use a different name."
-                                            , Toast.LENGTH_LONG).show();
-                                }
-                            }
                         }
+
+                        // If the service is a new service
                         if(!sameServiceFound){
                             // Adds the service to the account's list of services
                             List<String> fileContentLines = FileHandlers.readFileLines(v.getContext(), (accountHash + ".txt"));
@@ -219,7 +225,6 @@ public class AddFragment extends Fragment {
         buttonAddAliases.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 // Create an AlertDialog.Builder and inflate the custom layout
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 LayoutInflater inflater = getLayoutInflater();
@@ -235,16 +240,104 @@ public class AddFragment extends Fragment {
                 AliasesAdapter aliasesAdapter = new AliasesAdapter(aliasesList);
                 recyclerViewAliases.setAdapter(aliasesAdapter);
 
-                // Example data (you would dynamically add to this list)
-                aliasesList.add("Alias 1");
-                aliasesList.add("Alias 2");
-                aliasesList.add("Alias 3");
-                aliasesList.add("Alias 4");
-                aliasesList.add("Alias 5");
+                // Fills the recyclerview with the aliases for the selected service (useless in this bit of the code though, but I will use it later and delete it from here if I remember)
+                // Gets selected account
+                NavigationView navigationView = getActivity().findViewById(R.id.drawerNavigationView);
+                Menu menu = navigationView.getMenu();
+                int accountHash = findSelectedMenuItemIdInGroup(menu, R.id.drawerGroup1);
+                if(accountHash == -1){
+                    Toast.makeText(v.getContext(), "Unexpected error getting the selected account", Toast.LENGTH_SHORT).show();
+                }else {
+                    String serviceName = serviceNameToStandard(editTextServiceName.getText().toString().trim());
+                    List<String[]> fileContent = FileHandlers.readFileAndDivideLines(v.getContext(), accountHash + ".txt");
+                    for (int i = 1; i < fileContent.size(); i++) {  // Skipping the first line since that's the encrypted password
+                        String[] line = fileContent.get(i);
+                        // Check if the first item (main service name) in the line equals the service
+                        if (line.length > 0 && line[0].equals(serviceName)) {
+                            for (int j = 1; j < line.length; j++){
+                                aliasesList.add(line[j]);
+                            }
+                        }
+                    }
+                }
                 aliasesAdapter.notifyDataSetChanged();
 
+                // Listener for the confirm button, to add an alias
+                Button addAliasConfirmButton = dialogView.findViewById(R.id.addAliasConfirmButton);
+                addAliasConfirmButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // Gets the input alias
+                        EditText editTextNewAlias = dialogView.findViewById(R.id.editTextNewAlias);
+                        String newAlias = serviceNameToStandard(editTextNewAlias.getText().toString().trim());
 
-                // TODO: other  listeners
+                        // Checks if the alias has already been used
+                        if(newAlias.isEmpty()){
+                            editTextNewAlias.setError("New alias cannot be empty");
+                        }else{
+                            // Gets selected account
+                            NavigationView navigationView = getActivity().findViewById(R.id.drawerNavigationView);
+                            Menu menu = navigationView.getMenu();
+                            int accountHash = findSelectedMenuItemIdInGroup(menu, R.id.drawerGroup1);
+                            if(accountHash == -1){
+                                Toast.makeText(v.getContext(), "Unexpected error getting the selected account", Toast.LENGTH_SHORT).show();
+                            }else{
+                                // Checks if the alias has already been used
+                                boolean aliasFound = false;
+                                List<String[]> fileContent = FileHandlers.readFileAndDivideLines(v.getContext(), accountHash + ".txt");
+                                if(serviceExists(fileContent, newAlias)){
+                                    aliasFound = true;
+                                    editTextNewAlias.setError("Alias already used as main service name.");
+                                    Toast.makeText(v.getContext(), "Alias already used as main service name."
+                                            , Toast.LENGTH_LONG).show();
+                                }else{
+                                    String serviceFromAlias = findServiceFromAlias(fileContent, newAlias);
+                                    if(!serviceFromAlias.equals("")){
+                                        aliasFound = true;
+                                        editTextNewAlias.setError("Alias already used with the service '"
+                                                + serviceFromAlias + "'. Remove the alias through the search page or use a different name.");
+                                        Toast.makeText(v.getContext(), "Alias already used with the service '"
+                                                        + serviceFromAlias + "'. Remove the alias through the search page or use a different name."
+                                                , Toast.LENGTH_LONG).show();
+                                    }
+                                }
+
+                                // If the alias is a new alias
+                                if(!aliasFound){
+                                    // Adds the alias to the account's service's list of alias
+                                    String serviceName = serviceNameToStandard(editTextServiceName.getText().toString().trim());
+                                    List<String> fileContentLines = FileHandlers.readFileLines(v.getContext(), (accountHash + ".txt"));
+
+
+                                    // Finds the service's line in the file
+                                    int serviceIndex = 0;
+                                    for (int i = 1; i < fileContent.size(); i++) {  // Skipping the first line since that's the encrypted password
+                                        String[] line = fileContent.get(i);
+                                        // Check if the first item (main service name) in the line equals the service
+                                        if (line.length > 0 && line[0].equals(serviceName)) {
+                                            serviceIndex = i;
+                                        }
+                                    }
+                                    if(serviceIndex == 0){
+                                        Toast.makeText(v.getContext(), "Unexpected error finding the service index", Toast.LENGTH_SHORT).show();
+                                    }else{
+                                        // Appends the alias in the service's line and overwrites the file
+                                        String previousServiceLine = fileContentLines.get(serviceIndex);
+                                        String appendServiceLine = previousServiceLine + "," + newAlias;
+                                        fileContentLines.set(serviceIndex, appendServiceLine);
+                                        FileHandlers.writeFileLines(v.getContext(), accountHash + ".txt", fileContentLines);
+
+                                        // Adds the alias to the recyclerview
+                                        editTextNewAlias.setText("");
+                                        aliasesList.add(newAlias);
+                                        aliasesAdapter.notifyItemInserted(aliasesList.size() - 1);
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                });
 
                 AlertDialog dialog = builder.create();
                 dialog.show();
@@ -308,5 +401,33 @@ public class AddFragment extends Fragment {
     }
 
 
+    private String serviceNameToStandard(String inputName){
+        return inputName.trim()
+                .toLowerCase()
+                .replaceAll("\\s+", "")
+                .replace(",", "");
+    }
 
+    private boolean serviceExists(List<String[]> fileContent, String serviceName){
+        for (int i = 1; i < fileContent.size(); i++) {  // Skipping the first line since that's the encrypted password
+            String[] line = fileContent.get(i);
+            // Check if the first item (main service name) in the line equals the service
+            if (line.length > 0 && line[0].equals(serviceName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    private String findServiceFromAlias(List<String[]> fileContent, String aliasName) {
+        for (int i = 1; i < fileContent.size(); i++) {  // Skipping the first line since that's the encrypted password
+            String[] line = fileContent.get(i);
+            // Checks if one of the aliases is equal to the service
+            for (int j = 1; j < line.length; j++) { // Skips the main service index 0
+                if (line[j].equals(aliasName)) {
+                    return line[0];
+                }
+            }
+        }
+        return "";
+    }
 }
