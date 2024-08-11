@@ -76,7 +76,7 @@ public class AddFragment extends Fragment {
 
         NavigationView navigationView = getActivity().findViewById(R.id.drawerNavigationView);
         Menu menu = navigationView.getMenu();
-        String selectedAccountName = findSelectedMenuItemNameInGroup(menu, R.id.drawerGroup1);
+        String selectedAccountName = OtherFunctions.findSelectedMenuItemNameInGroup(menu, R.id.drawerGroup1);
         textViewGeneratePasswordAccountName.setText("for " + selectedAccountName);
 
         selectedAccountHash = OtherFunctions.findSelectedMenuItemIdInGroup(menu, R.id.drawerGroup1);
@@ -97,7 +97,7 @@ public class AddFragment extends Fragment {
                     fileAccountContent = FileHandlers.readFileAndDivideLines(getContext(), selectedAccountHash + ".txt");
                 }
 
-                String serviceName = s.toString();
+                String serviceName = OtherFunctions.serviceNameToStandard(s.toString());
                 List<String> similarServices = new ArrayList<>();
                 // If the input text is longer than 1 character
                 if(serviceName.length() > 1){
@@ -351,17 +351,6 @@ public class AddFragment extends Fragment {
         });
 
         return rootView;
-    }
-
-    // Gets the selected account's name
-    private String findSelectedMenuItemNameInGroup(Menu menu, int groupId) {
-        for (int i = 0; i < menu.size(); i++) {
-            MenuItem item = menu.getItem(i);
-            if (item.getGroupId() == groupId && item.isChecked()) {
-                return item.getTitle().toString();
-            }
-        }
-        return "";
     }
 
     // Checks the edit distance between two strings

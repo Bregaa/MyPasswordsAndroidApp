@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -65,11 +66,12 @@ public class MainActivity extends AppCompatActivity {
                     textView.setText(String.valueOf(item.getItemId()));
                 }
 
-                // Check if the fragment "fragment_add" is currently being shown
                 FragmentManager fragmentManager = getSupportFragmentManager();
+
+                // Check if the fragment "fragment_add" is currently being shown
                 Fragment fragment = fragmentManager.findFragmentByTag("AddFragment");
                 if (fragment != null && fragment.isVisible()) {
-                    // Find the TextView within the fragment and update its text
+                    // Find the TextView within the fragment and updates its text
                     TextView textViewGeneratePasswordAccountName = fragment.getView().findViewById(R.id.textViewGeneratePasswordAccountName);
                     if (textViewGeneratePasswordAccountName != null) {
                         textViewGeneratePasswordAccountName.setText("for " + item.getTitle());
@@ -81,6 +83,20 @@ public class MainActivity extends AppCompatActivity {
                     Button aliasesButton = fragment.getView().findViewById(R.id.buttonAddAliases);
                     aliasesButton.setVisibility(View.GONE);
                 }
+                // Check if the fragment "fragment_search" is currently being shown
+                fragment = fragmentManager.findFragmentByTag("SearchFragment");
+                if (fragment != null && fragment.isVisible()) {
+                    // Find the TextView within the fragment and updates its text
+                    TextView textViewSearchPasswordAccountName = fragment.getView().findViewById(R.id.textViewSearchPasswordAccountName);
+                    if (textViewSearchPasswordAccountName != null) {
+                        textViewSearchPasswordAccountName.setText("for " + item.getTitle());
+                    }
+                    EditText editTextSearchServiceName = fragment.getView().findViewById(R.id.editTextSearchServiceName);
+                    editTextSearchServiceName.setText("");
+
+                }
+
+
 
                 binding.drawerLayout.closeDrawer(GravityCompat.START);
                 return true;

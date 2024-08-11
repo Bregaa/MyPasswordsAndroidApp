@@ -23,4 +23,15 @@ public class OtherFunctions {
         }
         return -1;
     }
+
+    // Gets the selected account's name
+    public static String findSelectedMenuItemNameInGroup(Menu menu, int groupId) {
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem item = menu.getItem(i);
+            if (item.getGroupId() == groupId && item.isChecked()) {
+                return item.getTitle().toString();
+            }
+        }
+        return "";
+    }
 }
