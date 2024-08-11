@@ -33,6 +33,7 @@ import it.matteobreganni.mypasswords.R;
 import utils.AliasesAdapter;
 import utils.EncryptionHandlers;
 import utils.FileHandlers;
+import utils.OtherFunctions;
 
 public class AddFragment extends Fragment {
 
@@ -78,7 +79,7 @@ public class AddFragment extends Fragment {
         String selectedAccountName = findSelectedMenuItemNameInGroup(menu, R.id.drawerGroup1);
         textViewGeneratePasswordAccountName.setText("for " + selectedAccountName);
 
-        selectedAccountHash = findSelectedMenuItemIdInGroup(menu, R.id.drawerGroup1);
+        selectedAccountHash = OtherFunctions.findSelectedMenuItemIdInGroup(menu, R.id.drawerGroup1);
         fileAccountContent = FileHandlers.readFileAndDivideLines(getContext(), selectedAccountHash + ".txt");
 
 
@@ -91,8 +92,8 @@ public class AddFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // If the saved file is from a different account, get the right file (the file's content is saved in a variable to not read the file every time)
-                if(findSelectedMenuItemIdInGroup(menu, R.id.drawerGroup1) != selectedAccountHash){
-                    selectedAccountHash = findSelectedMenuItemIdInGroup(menu, R.id.drawerGroup1);
+                if(OtherFunctions.findSelectedMenuItemIdInGroup(menu, R.id.drawerGroup1) != selectedAccountHash){
+                    selectedAccountHash = OtherFunctions.findSelectedMenuItemIdInGroup(menu, R.id.drawerGroup1);
                     fileAccountContent = FileHandlers.readFileAndDivideLines(getContext(), selectedAccountHash + ".txt");
                 }
 
@@ -140,7 +141,7 @@ public class AddFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Gets input service
-                String serviceName = serviceNameToStandard(editTextServiceName.getText().toString());
+                String serviceName = OtherFunctions.serviceNameToStandard(editTextServiceName.getText().toString());
 
                 if(serviceName.isEmpty()){
                     editTextServiceName.setError("Service name cannot be empty");
@@ -148,7 +149,7 @@ public class AddFragment extends Fragment {
                     // Gets selected account
                     NavigationView navigationView = getActivity().findViewById(R.id.drawerNavigationView);
                     Menu menu = navigationView.getMenu();
-                    int accountHash = findSelectedMenuItemIdInGroup(menu, R.id.drawerGroup1);
+                    int accountHash = OtherFunctions.findSelectedMenuItemIdInGroup(menu, R.id.drawerGroup1);
                     if(accountHash == -1){
                         Toast.makeText(v.getContext(), "Unexpected error getting the selected account", Toast.LENGTH_SHORT).show();
                     }else{
@@ -231,24 +232,29 @@ public class AddFragment extends Fragment {
                 View dialogView = inflater.inflate(R.layout.dialog_aliases, null);
                 builder.setView(dialogView);
 
+                // Sets title
+                String serviceName = OtherFunctions.serviceNameToStandard(editTextServiceName.getText().toString().trim());
+                TextView dialogAliasesTitle = dialogView.findViewById(R.id.dialogAliasesTitle);
+                dialogAliasesTitle.setText(serviceName + "'s aliases");
+
                 // Initialize RecyclerView within the dialog view
                 RecyclerView recyclerViewAliases = dialogView.findViewById(R.id.recyclerViewAliases);
                 recyclerViewAliases.setLayoutManager(new GridLayoutManager(getContext(), 2));
 
                 // Initialize list and adapter
                 List<String> aliasesList = new ArrayList<>();
-                AliasesAdapter aliasesAdapter = new AliasesAdapter(aliasesList);
+                AliasesAdapter aliasesAdapter = new AliasesAdapter(aliasesList, AddFragment.this);
                 recyclerViewAliases.setAdapter(aliasesAdapter);
 
                 // Fills the recyclerview with the aliases for the selected service (useless in this bit of the code though, but I will use it later and delete it from here if I remember)
                 // Gets selected account
                 NavigationView navigationView = getActivity().findViewById(R.id.drawerNavigationView);
                 Menu menu = navigationView.getMenu();
-                int accountHash = findSelectedMenuItemIdInGroup(menu, R.id.drawerGroup1);
+                int accountHash = OtherFunctions.findSelectedMenuItemIdInGroup(menu, R.id.drawerGroup1);
                 if(accountHash == -1){
                     Toast.makeText(v.getContext(), "Unexpected error getting the selected account", Toast.LENGTH_SHORT).show();
                 }else {
-                    String serviceName = serviceNameToStandard(editTextServiceName.getText().toString().trim());
+
                     List<String[]> fileContent = FileHandlers.readFileAndDivideLines(v.getContext(), accountHash + ".txt");
                     for (int i = 1; i < fileContent.size(); i++) {  // Skipping the first line since that's the encrypted password
                         String[] line = fileContent.get(i);
@@ -269,7 +275,7 @@ public class AddFragment extends Fragment {
                     public void onClick(View v) {
                         // Gets the input alias
                         EditText editTextNewAlias = dialogView.findViewById(R.id.editTextNewAlias);
-                        String newAlias = serviceNameToStandard(editTextNewAlias.getText().toString().trim());
+                        String newAlias = OtherFunctions.serviceNameToStandard(editTextNewAlias.getText().toString().trim());
 
                         // Checks if the alias has already been used
                         if(newAlias.isEmpty()){
@@ -278,7 +284,7 @@ public class AddFragment extends Fragment {
                             // Gets selected account
                             NavigationView navigationView = getActivity().findViewById(R.id.drawerNavigationView);
                             Menu menu = navigationView.getMenu();
-                            int accountHash = findSelectedMenuItemIdInGroup(menu, R.id.drawerGroup1);
+                            int accountHash = OtherFunctions.findSelectedMenuItemIdInGroup(menu, R.id.drawerGroup1);
                             if(accountHash == -1){
                                 Toast.makeText(v.getContext(), "Unexpected error getting the selected account", Toast.LENGTH_SHORT).show();
                             }else{
@@ -305,7 +311,7 @@ public class AddFragment extends Fragment {
                                 // If the alias is a new alias
                                 if(!aliasFound){
                                     // Adds the alias to the account's service's list of alias
-                                    String serviceName = serviceNameToStandard(editTextServiceName.getText().toString().trim());
+                                    String serviceName = OtherFunctions.serviceNameToStandard(editTextServiceName.getText().toString().trim());
                                     List<String> fileContentLines = FileHandlers.readFileLines(v.getContext(), (accountHash + ".txt"));
 
 
@@ -358,17 +364,6 @@ public class AddFragment extends Fragment {
         return "";
     }
 
-    // Finds the selected item in the drawer menu
-    private int findSelectedMenuItemIdInGroup(Menu menu, int groupId) {
-        for (int i = 0; i < menu.size(); i++) {
-            MenuItem item = menu.getItem(i);
-            if (item.getGroupId() == groupId && item.isChecked()) {
-                return item.getItemId();
-            }
-        }
-        return -1;
-    }
-
     // Checks the edit distance between two strings
     public int editDistance(String s1, String s2) {
         return levenshteinDistance(s1, s2);
@@ -398,14 +393,6 @@ public class AddFragment extends Fragment {
         }
 
         return dp[len1][len2];
-    }
-
-
-    private String serviceNameToStandard(String inputName){
-        return inputName.trim()
-                .toLowerCase()
-                .replaceAll("\\s+", "")
-                .replace(",", "");
     }
 
     private boolean serviceExists(List<String[]> fileContent, String serviceName){
