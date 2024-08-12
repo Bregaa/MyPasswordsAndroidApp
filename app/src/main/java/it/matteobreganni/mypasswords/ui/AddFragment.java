@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,6 +51,7 @@ public class AddFragment extends Fragment {
     private CardView generatedPasswordSection;
     private LinearLayout generatePasswordWarningSection;
     private TextView generatePasswordWarningText;
+    private EditText editTextAddServicePassword;
 
     private int selectedAccountHash;
     private List<String[]> fileAccountContent;
@@ -73,6 +76,7 @@ public class AddFragment extends Fragment {
         generatedPasswordSection = rootView.findViewById(R.id.generatedPasswordSection);
         generatePasswordWarningSection = rootView.findViewById(R.id.generatePasswordWarningSection);
         generatePasswordWarningText = rootView.findViewById(R.id.generatePasswordWarningText);
+        editTextAddServicePassword = rootView.findViewById(R.id.editTextAddServicePassword);
 
         NavigationView navigationView = getActivity().findViewById(R.id.drawerNavigationView);
         Menu menu = navigationView.getMenu();
@@ -136,7 +140,6 @@ public class AddFragment extends Fragment {
             }
         });
 
-
         buttonGeneratePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,36 +162,45 @@ public class AddFragment extends Fragment {
                         if(serviceExists(fileContent, serviceName)){
                             sameServiceFound = true;
                             editTextServiceName.setError("Service name already used. Switch to the 'search' page!");
-                            Toast.makeText(v.getContext(), "Service name already used. Switch to the 'search' page!"
-                                    , Toast.LENGTH_LONG).show();
+                            /*Toast.makeText(v.getContext(), "Service name already used. Switch to the 'search' page!"
+                                    , Toast.LENGTH_LONG).show();*/
                         }else{
                             String serviceFromAlias = findServiceFromAlias(fileContent, serviceName);
                             if(!serviceFromAlias.equals("")){
                                 sameServiceFound = true;
                                 editTextServiceName.setError("Service name already used as alias of the service '"
                                         + serviceFromAlias + "'. Remove the alias through the search page or use a different name.");
-                                Toast.makeText(v.getContext(), "Service name already used as alias of the service '"
+                                /*Toast.makeText(v.getContext(), "Service name already used as alias of the service '"
                                                 + serviceFromAlias + "'. Remove the alias through the search page or use a different name."
-                                        , Toast.LENGTH_LONG).show();
+                                        , Toast.LENGTH_LONG).show();*/
                             }
                         }
 
                         // If the service is a new service
                         if(!sameServiceFound){
-                            // Adds the service to the account's list of services
                             List<String> fileContentLines = FileHandlers.readFileLines(v.getContext(), (accountHash + ".txt"));
-                            fileContentLines.add(serviceName);
-                            fileAccountContent.add(new String[] { serviceName });
-                            FileHandlers.writeFileLines(v.getContext(), accountHash + ".txt", fileContentLines);
 
-                            //Toast.makeText(v.getContext(), serviceName + "'s password generated!", Toast.LENGTH_SHORT).show();
-                            textViewGeneratedPasswordTitle.setText(serviceName + "'s password:");
-                            generatedPasswordSection.setVisibility(View.VISIBLE);
-                            buttonAddAliases.setVisibility(View.VISIBLE);
+                            // Checked if the input password is correct (same as the encrypted saved password)
+                            String savedPassword = fileContentLines.get(0);
+                            String secretKey = editTextAddServicePassword.getText().toString().trim();
+                            String encryptedPassword = EncryptionHandlers.encrypt(secretKey);
+                            if(savedPassword.equals(encryptedPassword)){
+                                // Adds the service to the account's list of services
+                                fileContentLines.add(serviceName);
+                                fileAccountContent.add(new String[] { serviceName });
+                                FileHandlers.writeFileLines(v.getContext(), accountHash + ".txt", fileContentLines);
 
-                            // Generates the password and sets it to the TextView
-                            String password = EncryptionHandlers.generatePassword(String.valueOf(accountHash), serviceName);
-                            textViewGeneratedPasswordShown.setText(password);
+                                //Toast.makeText(v.getContext(), serviceName + "'s password generated!", Toast.LENGTH_SHORT).show();
+                                textViewGeneratedPasswordTitle.setText(serviceName + "'s password:");
+                                generatedPasswordSection.setVisibility(View.VISIBLE);
+                                buttonAddAliases.setVisibility(View.VISIBLE);
+
+                                // Generates the password and sets it to the TextView
+                                String password = EncryptionHandlers.generatePassword(String.valueOf(accountHash), serviceName);
+                                textViewGeneratedPasswordShown.setText(password);
+                            }else{
+                                editTextAddServicePassword.setError("Wrong secret key for this account");
+                            }
                         }
 
                     }
@@ -203,9 +215,11 @@ public class AddFragment extends Fragment {
             public void onClick(View v) {
                 // Toggle password visibility
                 if (isPasswordVisible) {
+                    buttonShowPassword.setImageResource(R.drawable.eye_crossed);
                     textViewGeneratedPasswordHidden.setVisibility(View.VISIBLE);
                     textViewGeneratedPasswordShown.setVisibility(View.GONE);
                 } else {
+                    buttonShowPassword.setImageResource(R.drawable.ic_baseline_remove_red_eye_24);
                     textViewGeneratedPasswordHidden.setVisibility(View.GONE);
                     textViewGeneratedPasswordShown.setVisibility(View.VISIBLE);
                 }

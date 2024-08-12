@@ -48,26 +48,33 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <EditText
-        android:id="@+id/editTextNewAlias"
-        android:layout_width="250dp"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editTextNewAliasContainer"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:hint="New alias..."
-        android:textColorHint="@color/dialogHintText"
-        android:backgroundTint="@color/editTextLineColor"
+        android:layout_gravity="center"
+        app:errorEnabled="true"
         app:layout_constraintTop_toBottomOf="@id/textViewNewAlias"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"/>
+        app:layout_constraintHorizontal_bias="0.5">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextNewAlias"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/editTextBackground"
+            android:hint="New alias's name" />
+    </com.google.android.material.textfield.TextInputLayout>
+
 
     <LinearLayout
         android:id="@+id/dialogAliasesSecondSection"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        app:layout_constraintTop_toBottomOf="@id/editTextNewAlias"
+        app:layout_constraintTop_toBottomOf="@id/editTextNewAliasContainer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 

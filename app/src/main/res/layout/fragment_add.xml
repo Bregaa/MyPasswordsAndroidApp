@@ -45,14 +45,19 @@
                 android:layout_marginBottom="18dp"
                 android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/editTextServiceName"
-                android:layout_width="250dp"
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:hint="Service name..."
                 android:layout_gravity="center"
-                android:textColorHint="@color/fragmentHintText"
-                android:backgroundTint="@color/fragmentEditTextLineColor" />
+                app:errorEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextServiceName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/editTextBackground"
+                    android:hint="Service name" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -60,7 +65,6 @@
                 android:visibility="gone"
                 android:id="@+id/generatePasswordWarningSection"
                 android:orientation="horizontal"
-                android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp">
 
                 <ImageView
@@ -79,6 +83,23 @@
                     android:textSize="14sp"
                     android:textColor="@color/fragmentWarning" />
             </LinearLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:passwordToggleEnabled="true"
+                app:errorEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextAddServicePassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/editTextBackground"
+                    android:hint="Secret key"
+                    android:inputType="textPassword"
+                    android:paddingEnd="48dp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/buttonGeneratePassword"
@@ -134,6 +155,7 @@
                     android:text="***************"
                     android:textSize="25sp"
                     android:layout_marginEnd="8dp"
+                    android:layout_gravity="center"
                     android:textColor="@color/fragmentTextColor" />
 
                 <TextView
@@ -152,7 +174,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="3dp"
-                    android:src="@drawable/ic_baseline_remove_red_eye_24"
+                    android:src="@drawable/eye_crossed"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:padding="7dp"
                     app:tint="@color/fragmentTextIcon"/>

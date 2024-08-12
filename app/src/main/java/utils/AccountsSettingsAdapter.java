@@ -57,7 +57,7 @@ public class AccountsSettingsAdapter extends RecyclerView.Adapter<AccountsSettin
 
             // Sets the hint of the EditText as the previous name
             String oldName = holder.accountName.getText().toString();
-            editTextNewAccountName.setHint(oldName);
+            editTextNewAccountName.setText(oldName);
 
             AlertDialog dialog = new AlertDialog.Builder(v.getContext())
                     .setView(dialogView)

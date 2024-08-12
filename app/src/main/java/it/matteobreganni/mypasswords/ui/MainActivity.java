@@ -78,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                     EditText serviceNameEditText = fragment.getView().findViewById(R.id.editTextServiceName);
                     serviceNameEditText.setText("");
+                    EditText editTextAddServicePassword = fragment.getView().findViewById(R.id.editTextAddServicePassword);
+                    editTextAddServicePassword.setText("");
                     CardView generatedPasswordArea = fragment.getView().findViewById(R.id.generatedPasswordSection);
                     generatedPasswordArea.setVisibility(View.GONE);
                     Button aliasesButton = fragment.getView().findViewById(R.id.buttonAddAliases);

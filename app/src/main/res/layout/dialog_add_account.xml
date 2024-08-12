@@ -17,31 +17,50 @@
         android:layout_marginBottom="10dp"
         android:layout_gravity="center" />
 
-    <EditText
-        android:id="@+id/editTextAccountName"
-        android:layout_width="match_parent"
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="270dp"
         android:layout_height="wrap_content"
-        android:textColorHint="@color/dialogHintText"
-        android:hint="Name (optional)"
-        android:backgroundTint="@color/editTextLineColor"/>
+        android:layout_gravity="center"
+        app:errorEnabled="true">
 
-    <EditText
-        android:id="@+id/editTextAccountEmail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColorHint="@color/dialogHintText"
-        android:hint="Email"
-        android:inputType="textEmailAddress"
-        android:backgroundTint="@color/editTextLineColor" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextAccountName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/editTextBackground"
+            android:hint="Name (optional)" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/editTextAccountPassword"
-        android:layout_width="match_parent"
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="270dp"
         android:layout_height="wrap_content"
-        android:textColorHint="@color/dialogHintText"
-        android:hint="Password"
-        android:inputType="textPassword"
-        android:backgroundTint="@color/editTextLineColor" />
+        android:layout_gravity="center"
+        app:errorEnabled="true">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextAccountEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/editTextBackground"
+            android:hint="Email" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:passwordToggleEnabled="true"
+        app:errorEnabled="true">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextAccountPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/editTextBackground"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:paddingEnd="48dp" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

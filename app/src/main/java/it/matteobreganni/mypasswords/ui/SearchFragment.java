@@ -8,11 +8,13 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -72,37 +74,54 @@ public class SearchFragment extends Fragment {
             @Override
             public void onDeleteClick(ServiceItem item) {
                 // Handle delete button click
-                String serviceNameToDelete = item.getTitle();
-                // Gets selected account
-                NavigationView navigationView = getActivity().findViewById(R.id.drawerNavigationView);
-                Menu menu = navigationView.getMenu();
-                int accountHash = OtherFunctions.findSelectedMenuItemIdInGroup(menu, R.id.drawerGroup1);
-                if(accountHash == -1){
-                    Toast.makeText(view.getContext(), "Unexpected error getting the selected account", Toast.LENGTH_SHORT).show();
-                }else {
-                    // Finds and delete the service's line in the file
-                    List<String[]> fileContent = FileHandlers.readFileAndDivideLines(view.getContext(), accountHash + ".txt");
-                    int indexFound = 0;
-                    for (int i = 1; i < fileContent.size(); i++){   // Skip hash line
-                        String[] line = fileContent.get(i);
-                        if(line[0].equals(serviceNameToDelete)){
-                            indexFound = i;
-                            break;
+
+                LayoutInflater inflater = LayoutInflater.from(view.getContext());
+                View dialogView = inflater.inflate(R.layout.dialog_delete_service, null);
+
+                Button buttonConfirm = dialogView.findViewById(R.id.deleteServiceButtonConfirm);
+
+                AlertDialog dialog = new AlertDialog.Builder(view.getContext())
+                        .setView(dialogView)
+                        .setCancelable(true)
+                        .create();
+
+                // Confirm button listener
+                buttonConfirm.setOnClickListener(view -> {
+                    String serviceNameToDelete = item.getTitle();
+
+                    // Gets selected account
+                    NavigationView navigationView = getActivity().findViewById(R.id.drawerNavigationView);
+                    Menu menu = navigationView.getMenu();
+                    int accountHash = OtherFunctions.findSelectedMenuItemIdInGroup(menu, R.id.drawerGroup1);
+                    if(accountHash == -1){
+                        Toast.makeText(view.getContext(), "Unexpected error getting the selected account", Toast.LENGTH_SHORT).show();
+                    }else {
+                        // Finds and delete the service's line in the file
+                        List<String[]> fileContent = FileHandlers.readFileAndDivideLines(view.getContext(), accountHash + ".txt");
+                        int indexFound = 0;
+                        for (int i = 1; i < fileContent.size(); i++){   // Skip hash line
+                            String[] line = fileContent.get(i);
+                            if(line[0].equals(serviceNameToDelete)){
+                                indexFound = i;
+                                break;
+                            }
+                        }
+                        if(indexFound == 0){
+                            Toast.makeText(view.getContext(), "Unexpected error finding the service to delete in the file", Toast.LENGTH_SHORT).show();
+                        }else{
+                            List<String> fileContentLines = FileHandlers.readFileLines(view.getContext(), (accountHash + ".txt"));
+                            fileContentLines.remove(indexFound);
+                            fileContent.remove(indexFound);
+                            fileAccountContent = fileContent;
+                            FileHandlers.writeFileLines(view.getContext(), accountHash + ".txt", fileContentLines);
+                            itemList.remove(item);
+                            servicesAdapter.notifyDataSetChanged();
                         }
                     }
-                    if(indexFound == 0){
-                        Toast.makeText(view.getContext(), "Unexpected error finding the service to delete in the file", Toast.LENGTH_SHORT).show();
-                    }else{
-                        List<String> fileContentLines = FileHandlers.readFileLines(view.getContext(), (accountHash + ".txt"));
-                        fileContentLines.remove(indexFound);
-                        fileContent.remove(indexFound);
-                        fileAccountContent = fileContent;
-                        FileHandlers.writeFileLines(view.getContext(), accountHash + ".txt", fileContentLines);
-                        itemList.remove(item);
-                        servicesAdapter.notifyDataSetChanged();
-                    }
-                }
+                    dialog.dismiss();
 
+                });
+                dialog.show();
             }
         });
         recyclerView.setAdapter(servicesAdapter);
