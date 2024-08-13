@@ -76,7 +76,7 @@ public class SearchFragment extends Fragment {
                 retrievePasswordFragment.setArguments(bundle);
 
                 getParentFragmentManager().beginTransaction()
-                        .replace(R.id.frame_layout, retrievePasswordFragment)
+                        .replace(R.id.frame_layout, retrievePasswordFragment, "RetrievePasswordFragment")
                         .addToBackStack(null)
                         .commit();
             }

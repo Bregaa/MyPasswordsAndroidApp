@@ -15,8 +15,8 @@ public class EncryptionHandlers {
     private static Pattern numberPattern = Pattern.compile("\\d");
     private static Pattern symbolPattern = Pattern.compile("[+/-]");
 
-    public static String generatePassword(String emailHash, String service){
-        return encrypt(emailHash + service);
+    public static String generatePassword(String emailHash, String passwordPlain, String servicePlain){
+        return encrypt(emailHash + passwordPlain + servicePlain);
     }
 
     public static String encrypt(String string){

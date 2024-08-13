@@ -37,17 +37,28 @@ public class GeneratedPasswordFragment extends Fragment {
     private TextView textViewGeneratedPasswordShown;
     private Button buttonCopyPassword;
     private Button buttonAddAliases;
+
     private EditText editTextServiceName;
 
-    AddFragment parentFragment;
+    private TextView hiddenServiceName;
+
+    AddFragment addFragment;
+    RetrievePasswordFragment anotherFragment;
 
     @Override
     public void onStart() {
         super.onStart();
 
-        // Gets objects from the parent fragment
-        parentFragment = (AddFragment) getParentFragment();
-        editTextServiceName = parentFragment.getActivity().findViewById(R.id.editTextServiceName);
+        // Gets the parent fragment, either AddFragment or RetrievePasswordFragment
+        Fragment parentFragment = getParentFragment();
+        if (parentFragment instanceof AddFragment) {
+            //addFragment = (AddFragment) parentFragment;
+            editTextServiceName = parentFragment.getActivity().findViewById(R.id.editTextServiceName);
+        } else if (parentFragment instanceof RetrievePasswordFragment) {
+            //anotherFragment = (RetrievePasswordFragment) parentFragment;
+            hiddenServiceName = parentFragment.getActivity().findViewById(R.id.hiddenServiceName);
+        }
+
 
     }
 
@@ -56,8 +67,6 @@ public class GeneratedPasswordFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_generated_password, container, false);
-
-        AddFragment parentFragment = (AddFragment) getParentFragment();
 
         buttonShowPassword = rootView.findViewById(R.id.buttonShowPassword);
         textViewGeneratedPasswordHidden = rootView.findViewById(R.id.textViewGeneratedPasswordHidden);
@@ -106,7 +115,12 @@ public class GeneratedPasswordFragment extends Fragment {
 
                 // Sets title
                 // TODO
-                String serviceName = OtherFunctions.serviceNameToStandard(editTextServiceName.getText().toString().trim());
+                String serviceName;
+                if(editTextServiceName != null){
+                    serviceName = OtherFunctions.serviceNameToStandard(editTextServiceName.getText().toString().trim());
+                }else{
+                    serviceName = OtherFunctions.serviceNameToStandard(hiddenServiceName.getText().toString().trim());
+                }
                 TextView dialogAliasesTitle = dialogView.findViewById(R.id.dialogAliasesTitle);
                 dialogAliasesTitle.setText(serviceName + "'s aliases");
 
@@ -184,7 +198,12 @@ public class GeneratedPasswordFragment extends Fragment {
                                 // If the alias is a new alias
                                 if(!aliasFound){
                                     // Adds the alias to the account's service's list of alias
-                                    String serviceName = OtherFunctions.serviceNameToStandard(editTextServiceName.getText().toString().trim());
+                                    String serviceName;
+                                    if(editTextServiceName != null){
+                                        serviceName = OtherFunctions.serviceNameToStandard(editTextServiceName.getText().toString().trim());
+                                    }else{
+                                        serviceName = OtherFunctions.serviceNameToStandard(hiddenServiceName.getText().toString().trim());
+                                    }
                                     List<String> fileContentLines = FileHandlers.readFileLines(v.getContext(), (accountHash + ".txt"));
 
 

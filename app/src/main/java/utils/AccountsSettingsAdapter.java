@@ -183,8 +183,9 @@ public class AccountsSettingsAdapter extends RecyclerView.Adapter<AccountsSettin
                 String accountEmailHash = null;
                 for (String[] entry : fileContent) {
                     if(!entry[1].equals(accountName)){
-                        accountEmailHash = entry[0];
                         newFileContent.add(entry[0] + "," + entry[1]);
+                    }else{
+                        accountEmailHash = entry[0];
                     }
                 }
                 FileHandlers.writeFileLines(view.getContext(), "accounts.txt", newFileContent);

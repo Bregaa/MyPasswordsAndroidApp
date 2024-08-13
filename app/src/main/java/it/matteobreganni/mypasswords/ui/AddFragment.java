@@ -182,7 +182,7 @@ public class AddFragment extends Fragment {
                                 buttonAddAliases.setVisibility(View.VISIBLE);
 
                                 // Generates the password and sets it to the TextView
-                                String password = EncryptionHandlers.generatePassword(String.valueOf(accountHash), serviceName);
+                                String password = EncryptionHandlers.generatePassword(String.valueOf(accountHash), secretKey, serviceName);
                                 textViewGeneratedPasswordShown.setText(password);
                             }else{
                                 editTextAddServicePassword.setError("Wrong secret key for this account");

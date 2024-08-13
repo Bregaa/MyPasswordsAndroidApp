@@ -97,7 +97,21 @@ public class MainActivity extends AppCompatActivity {
                     editTextSearchServiceName.setText("");
 
                 }
+                // Check if the fragment "fragment_retrieve_password" is currently being shown
+                fragment = fragmentManager.findFragmentByTag("RetrievePasswordFragment");
+                if (fragment != null && fragment.isVisible()) {
+                    // Find the TextView within the fragment and updates its text
+                    TextView textViewRetrievePasswordAccountName = fragment.getView().findViewById(R.id.textViewRetrievePasswordAccountName);
+                    EditText editTextRetrieveServicePassword = fragment.getView().findViewById(R.id.editTextRetrieveServicePassword);
+                    editTextRetrieveServicePassword.setText("");
+                    CardView generatedPasswordArea = fragment.getView().findViewById(R.id.generatedPasswordSection);
+                    generatedPasswordArea.setVisibility(View.GONE);
+                    Button aliasesButton = fragment.getView().findViewById(R.id.buttonAddAliases);
+                    aliasesButton.setVisibility(View.GONE);
 
+                    //Go back to previous fragment
+                    getSupportFragmentManager().popBackStack();
+                }
 
 
                 binding.drawerLayout.closeDrawer(GravityCompat.START);
