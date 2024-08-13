@@ -67,8 +67,18 @@ public class SearchFragment extends Fragment {
         servicesAdapter = new ServicesAdapter(itemList, new ServicesAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(ServiceItem item) {
-                Toast.makeText(view.getContext(), "Item clicked!", Toast.LENGTH_SHORT).show();
-                // TODO
+                // Creates a new instance of the RetrievePasswordFragment
+                RetrievePasswordFragment retrievePasswordFragment = new RetrievePasswordFragment();
+
+                // Creates a Bundle to pass the data
+                Bundle bundle = new Bundle();
+                bundle.putString("serviceName", item.getTitle());
+                retrievePasswordFragment.setArguments(bundle);
+
+                getParentFragmentManager().beginTransaction()
+                        .replace(R.id.frame_layout, retrievePasswordFragment)
+                        .addToBackStack(null)
+                        .commit();
             }
         }, new ServicesAdapter.OnDeleteClickListener() {
             @Override
