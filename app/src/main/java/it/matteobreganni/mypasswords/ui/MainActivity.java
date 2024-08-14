@@ -60,12 +60,6 @@ public class MainActivity extends AppCompatActivity {
         binding.drawerNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-                TextView textView = findViewById(R.id.textView);
-                if(textView != null){
-                    textView.setText(String.valueOf(item.getItemId()));
-                }
-
                 FragmentManager fragmentManager = getSupportFragmentManager();
 
                 // Check if the fragment "fragment_add" is currently being shown
