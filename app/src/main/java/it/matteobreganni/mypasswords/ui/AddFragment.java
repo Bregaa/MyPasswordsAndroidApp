@@ -1,5 +1,6 @@
 package it.matteobreganni.mypasswords.ui;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -16,6 +17,8 @@ import android.widget.Toast;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
@@ -25,6 +28,7 @@ import it.matteobreganni.mypasswords.R;
 import utils.EncryptionHandlers;
 import utils.FileHandlers;
 import utils.OtherFunctions;
+import utils.RecentServicesHandlers;
 
 public class AddFragment extends Fragment {
 
@@ -51,6 +55,16 @@ public class AddFragment extends Fragment {
 
         // Gets the child fragment, the second section of the page, shared with the search fragment
         GeneratedPasswordFragment generatedPasswordFragment = (GeneratedPasswordFragment) getChildFragmentManager().findFragmentById(R.id.reusable_fragment);
+
+        // Setting bottom menu selections
+        FloatingActionButton homeFabButton = getActivity().findViewById(R.id.homeFabButton);
+        BottomNavigationView bottomMenu = getActivity().findViewById(R.id.bottomNavigationView);
+        homeFabButton.setImageTintList(ColorStateList.valueOf(
+                getResources().getColor(R.color.bottomMenuUnselectedItem, requireActivity().getTheme())
+        ));
+        if(bottomMenu.getSelectedItemId() != R.id.addFragment){
+            bottomMenu.setSelectedItemId(R.id.addFragment);
+        }
 
         // Retrieve references to the UI components
         textViewGeneratePasswordAccountName = rootView.findViewById(R.id.textViewGeneratePasswordAccountName);
@@ -139,6 +153,7 @@ public class AddFragment extends Fragment {
                     NavigationView navigationView = getActivity().findViewById(R.id.drawerNavigationView);
                     Menu menu = navigationView.getMenu();
                     int accountHash = OtherFunctions.findSelectedMenuItemIdInGroup(menu, R.id.drawerGroup1);
+                    String accountName = OtherFunctions.findSelectedMenuItemNameInGroup(menu, R.id.drawerGroup1);
                     if(accountHash == -1){
                         Toast.makeText(v.getContext(), "Unexpected error getting the selected account", Toast.LENGTH_SHORT).show();
                     }else{
@@ -175,6 +190,9 @@ public class AddFragment extends Fragment {
                                 fileContentLines.add(serviceName);
                                 fileAccountContent.add(new String[] { serviceName });
                                 FileHandlers.writeFileLines(v.getContext(), accountHash + ".txt", fileContentLines);
+
+                                // Add the service to the recentService file
+                                RecentServicesHandlers.addRecentService(v.getContext(), serviceName, accountName);
 
                                 //Toast.makeText(v.getContext(), serviceName + "'s password generated!", Toast.LENGTH_SHORT).show();
                                 textViewGeneratedPasswordTitle.setText(serviceName + "'s password:");

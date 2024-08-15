@@ -22,6 +22,7 @@ import it.matteobreganni.mypasswords.R;
 import utils.EncryptionHandlers;
 import utils.FileHandlers;
 import utils.OtherFunctions;
+import utils.RecentServicesHandlers;
 
 public class RetrievePasswordFragment extends Fragment {
 
@@ -85,6 +86,7 @@ public class RetrievePasswordFragment extends Fragment {
                 NavigationView navigationView = getActivity().findViewById(R.id.drawerNavigationView);
                 Menu menu = navigationView.getMenu();
                 int accountHash = OtherFunctions.findSelectedMenuItemIdInGroup(menu, R.id.drawerGroup1);
+                String accountName = OtherFunctions.findSelectedMenuItemNameInGroup(menu, R.id.drawerGroup1);
                 if(accountHash == -1){
                     Toast.makeText(v.getContext(), "Unexpected error getting the selected account", Toast.LENGTH_SHORT).show();
                 }else{
@@ -101,6 +103,9 @@ public class RetrievePasswordFragment extends Fragment {
                         // Generates the password and sets it to the TextView
                         String password = EncryptionHandlers.generatePassword(String.valueOf(accountHash), secretKey, serviceName);
                         textViewGeneratedPasswordShown.setText(password);
+
+                        // Add the service to the recentService file
+                        RecentServicesHandlers.addRecentService(v.getContext(), serviceName, accountName);
                     }else{
                         editTextRetrieveServicePassword.setError("Wrong secret key for this account");
                     }

@@ -37,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private ActionBarDrawerToggle toggle;
 
+    private static final int BACK_PRESS_INTERVAL = 2000;
+    private long lastBackPressedTime;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -139,22 +142,29 @@ public class MainActivity extends AppCompatActivity {
 
         // Handles the bottom menu item selections
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
-            switch (item.getItemId()){
-                case R.id.add:
-                    replaceFragment(new AddFragment(), "AddFragment");
+            NavigationView navigationView = this.findViewById(R.id.drawerNavigationView);
+            Menu menu = navigationView.getMenu();
+            if(menu.size() == 1){
+                Toast.makeText(this, "First, create an account!", Toast.LENGTH_SHORT).show();
+                if(item.getItemId() != R.id.home){
                     changeFabColor(false);
-                    EncryptionHandlers.encrypt("as");
-                    break;
-
-                case R.id.search:
-                    replaceFragment(new SearchFragment(), "SearchFragment");
-                    changeFabColor(false);
-                    break;
-
-                case R.id.home:
-                    replaceFragment(new HomeFragment(), "HomeFragment");
+                }else{
                     changeFabColor(true);
-                    break;
+                }
+            }else {
+                switch (item.getItemId()) {
+                    case R.id.add:
+                        replaceFragment(new AddFragment(), "AddFragment");
+                        break;
+
+                    case R.id.search:
+                        replaceFragment(new SearchFragment(), "SearchFragment");
+                        break;
+
+                    case R.id.home:
+                        replaceFragment(new HomeFragment(), "HomeFragment");
+                        break;
+                }
             }
             return true;
         });
@@ -164,6 +174,24 @@ public class MainActivity extends AppCompatActivity {
                 binding.bottomNavigationView.setSelectedItemId(R.id.home);
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        // If there are fragments in the back stack, pop the back stack
+        if (fragmentManager.getBackStackEntryCount() > 0) {
+            fragmentManager.popBackStack();
+        } else {
+            // Otherwise, implement double back press to exit
+            if (lastBackPressedTime + BACK_PRESS_INTERVAL > System.currentTimeMillis()) {
+                super.onBackPressed();  // Close app
+            } else {
+                Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT).show();
+                lastBackPressedTime = System.currentTimeMillis();
+            }
+        }
     }
 
     // Handles the opening of the drawer menu

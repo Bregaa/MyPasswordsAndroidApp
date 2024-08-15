@@ -91,13 +91,16 @@ public class AccountsSettingsAdapter extends RecyclerView.Adapter<AccountsSettin
                         // Overwrites accounts.txt with the new name
                         FileHandlers.writeFileLines(view.getContext(), "accounts.txt", newFileContent);
 
-                        //Changes the name in the settings fragment and in the drawer menu
+                        // Changes the name in the settings fragment and in the drawer menu
                         holder.accountName.setText(newName);
                         Menu menu = navigationView.getMenu();
                         MenuItem itemToUpdate = findMenuItemByName(menu, oldName);
                         if (itemToUpdate != null) {
                             itemToUpdate.setTitle(newName);
                         }
+
+                        // Changes the name in the recent services
+                        RecentServicesHandlers.editRecentServicesAccountNames(view.getContext(), oldName, newName);
 
                         dialog.dismiss();
                         Toast.makeText(view.getContext(), "Account name changed!", Toast.LENGTH_SHORT).show();

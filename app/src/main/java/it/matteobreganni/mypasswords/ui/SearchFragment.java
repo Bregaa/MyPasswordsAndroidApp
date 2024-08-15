@@ -1,5 +1,6 @@
 package it.matteobreganni.mypasswords.ui;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,6 +20,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
@@ -27,6 +30,7 @@ import java.util.List;
 import it.matteobreganni.mypasswords.R;
 import utils.FileHandlers;
 import utils.OtherFunctions;
+import utils.RecentServicesHandlers;
 import utils.ServiceItem;
 import utils.ServicesAdapter;
 
@@ -45,6 +49,16 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
+
+        // Setting bottom menu selections
+        FloatingActionButton homeFabButton = getActivity().findViewById(R.id.homeFabButton);
+        BottomNavigationView bottomMenu = getActivity().findViewById(R.id.bottomNavigationView);
+        homeFabButton.setImageTintList(ColorStateList.valueOf(
+                getResources().getColor(R.color.bottomMenuUnselectedItem, requireActivity().getTheme())
+        ));
+        if(bottomMenu.getSelectedItemId() != R.id.search){
+            bottomMenu.setSelectedItemId(R.id.search);
+        }
 
         recyclerView = view.findViewById(R.id.searchRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -103,6 +117,7 @@ public class SearchFragment extends Fragment {
                     NavigationView navigationView = getActivity().findViewById(R.id.drawerNavigationView);
                     Menu menu = navigationView.getMenu();
                     int accountHash = OtherFunctions.findSelectedMenuItemIdInGroup(menu, R.id.drawerGroup1);
+                    String accountName = OtherFunctions.findSelectedMenuItemNameInGroup(menu, R.id.drawerGroup1);
                     if(accountHash == -1){
                         Toast.makeText(view.getContext(), "Unexpected error getting the selected account", Toast.LENGTH_SHORT).show();
                     }else {
@@ -119,11 +134,17 @@ public class SearchFragment extends Fragment {
                         if(indexFound == 0){
                             Toast.makeText(view.getContext(), "Unexpected error finding the service to delete in the file", Toast.LENGTH_SHORT).show();
                         }else{
+                            // Removes the service from the account's file
                             List<String> fileContentLines = FileHandlers.readFileLines(view.getContext(), (accountHash + ".txt"));
                             fileContentLines.remove(indexFound);
                             fileContent.remove(indexFound);
                             fileAccountContent = fileContent;
                             FileHandlers.writeFileLines(view.getContext(), accountHash + ".txt", fileContentLines);
+
+                            // Removes the service from the recent services
+                            RecentServicesHandlers.deleteRecentService(view.getContext(), serviceNameToDelete, accountName);
+
+                            // Removes the service from the recyclerview
                             itemList.remove(item);
                             servicesAdapter.notifyDataSetChanged();
                         }

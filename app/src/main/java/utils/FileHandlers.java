@@ -50,7 +50,7 @@ public class FileHandlers {
         //logAllFiles(context);
     }
 
-    private static boolean fileExists(Context context, String fileName){
+    public static boolean fileExists(Context context, String fileName){
         File file = new File(context.getFilesDir(), fileName);
         return file.exists();
     }

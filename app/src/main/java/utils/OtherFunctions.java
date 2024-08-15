@@ -1,5 +1,6 @@
 package utils;
 
+import android.content.Context;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -35,6 +36,17 @@ public class OtherFunctions {
             }
         }
         return "";
+    }
+
+    // Finds the account's hash from the name
+    public static int findSelectedMenuItemNameInGroup(Menu menu, int groupId, String accountName) {
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem item = menu.getItem(i);
+            if (item.getGroupId() == groupId && item.getTitle().equals(accountName)) {
+                return item.getItemId();
+            }
+        }
+        return -1;
     }
 
     // Checks if the service exists in the given fileContent
