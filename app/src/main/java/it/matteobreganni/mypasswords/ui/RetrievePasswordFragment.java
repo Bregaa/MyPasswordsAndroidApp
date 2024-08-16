@@ -96,6 +96,7 @@ public class RetrievePasswordFragment extends Fragment {
                     String secretKey = editTextRetrieveServicePassword.getText().toString().trim();
                     String encryptedPassword = EncryptionHandlers.encrypt(secretKey);
                     if(savedPassword.equals(encryptedPassword)){
+                        OtherFunctions.hideKeyboard(v.getContext(), v.getRootView());
                         textViewGeneratedPasswordTitle.setText(serviceName + "'s password:");
                         generatedPasswordSection.setVisibility(View.VISIBLE);
                         buttonAddAliases.setVisibility(View.VISIBLE);

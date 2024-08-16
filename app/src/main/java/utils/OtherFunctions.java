@@ -3,8 +3,14 @@ package utils;
 import android.content.Context;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import java.util.List;
+
+import it.matteobreganni.mypasswords.R;
+import it.matteobreganni.mypasswords.ui.HomeFragment;
+import it.matteobreganni.mypasswords.ui.MainActivity;
 
 public class OtherFunctions {
 
@@ -73,5 +79,23 @@ public class OtherFunctions {
             }
         }
         return "";
+    }
+
+    public static void switchToHomeFragmentAndClearStack(Context context){
+        // Switch to the Home fragment
+        MainActivity activity = (MainActivity) context;
+        activity.getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.frame_layout, new HomeFragment()) // Replace with the ID of your fragment container
+                .commit();
+        // Clear the back stack
+        activity.getSupportFragmentManager().popBackStack(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+    }
+
+    public static void hideKeyboard(Context context, View view) {
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 }

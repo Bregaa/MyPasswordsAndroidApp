@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.matteobreganni.mypasswords.R;
+import it.matteobreganni.mypasswords.ui.HomeFragment;
 import it.matteobreganni.mypasswords.ui.MainActivity;
 
 public class AccountsSettingsAdapter extends RecyclerView.Adapter<AccountsSettingsAdapter.ViewHolder> {
@@ -88,6 +89,7 @@ public class AccountsSettingsAdapter extends RecyclerView.Adapter<AccountsSettin
                     if(sameNameFound){
                         editTextNewAccountName.setError("An account with same name exists.");
                     }else{
+                        OtherFunctions.hideKeyboard(view.getContext(), view.getRootView());
                         // Overwrites accounts.txt with the new name
                         FileHandlers.writeFileLines(view.getContext(), "accounts.txt", newFileContent);
 
@@ -131,6 +133,7 @@ public class AccountsSettingsAdapter extends RecyclerView.Adapter<AccountsSettin
                     editTextCheckAccountPassword.setError("Password cannot be empty");
                 }
                 else{
+                    OtherFunctions.hideKeyboard(view.getContext(), view.getRootView());
                     // Checks if the encrypted input password matches the saved one
                     String encryptedPassword = EncryptionHandlers.encrypt(password);
                     String accountName = holder.accountName.getText().toString();
@@ -210,6 +213,11 @@ public class AccountsSettingsAdapter extends RecyclerView.Adapter<AccountsSettin
                     items.remove(position);
                     notifyItemRemoved(position);
                     notifyItemRangeChanged(position, items.size());
+
+                    // Deletes the account's recent services
+                    RecentServicesHandlers.deleteRecentAccountServices(view.getContext(), accountName);
+
+                    OtherFunctions.switchToHomeFragmentAndClearStack(view.getContext());
                 }
 
                 dialog.dismiss();

@@ -81,6 +81,7 @@ public class SearchFragment extends Fragment {
         servicesAdapter = new ServicesAdapter(itemList, new ServicesAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(ServiceItem item) {
+                OtherFunctions.hideKeyboard(view.getContext(), view);
                 // Creates a new instance of the RetrievePasswordFragment
                 RetrievePasswordFragment retrievePasswordFragment = new RetrievePasswordFragment();
 

@@ -186,6 +186,7 @@ public class AddFragment extends Fragment {
                             String secretKey = editTextAddServicePassword.getText().toString().trim();
                             String encryptedPassword = EncryptionHandlers.encrypt(secretKey);
                             if(savedPassword.equals(encryptedPassword)){
+                                OtherFunctions.hideKeyboard(v.getContext(), v.getRootView());
                                 // Adds the service to the account's list of services
                                 fileContentLines.add(serviceName);
                                 fileAccountContent.add(new String[] { serviceName });

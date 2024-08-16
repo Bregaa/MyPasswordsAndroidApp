@@ -113,8 +113,6 @@ public class GeneratedPasswordFragment extends Fragment {
                 View dialogView = inflater.inflate(R.layout.dialog_aliases, null);
                 builder.setView(dialogView);
 
-                // Sets title
-                // TODO
                 String serviceName;
                 if(editTextServiceName != null){
                     serviceName = OtherFunctions.serviceNameToStandard(editTextServiceName.getText().toString().trim());
@@ -197,6 +195,7 @@ public class GeneratedPasswordFragment extends Fragment {
 
                                 // If the alias is a new alias
                                 if(!aliasFound){
+                                    OtherFunctions.hideKeyboard(v.getContext(), v);
                                     // Adds the alias to the account's service's list of alias
                                     String serviceName;
                                     if(editTextServiceName != null){

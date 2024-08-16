@@ -43,6 +43,28 @@ public class RecentServicesHandlers {
         }
     }
 
+    public static void deleteRecentAccountServices(Context context, String accountName){
+        if(FileHandlers.fileExists(context, "recentServices.txt")){
+            List<String> fileContentLines = FileHandlers.readFileLines(context, "recentServices.txt");
+            List<String[]> fileContent = FileHandlers.readFileAndDivideLines(context, "recentServices.txt");
+            Log.d("asd", String.valueOf(fileContentLines.size()));
+            Log.d("asd", String.valueOf(fileContent.size()));
+            int howManyServicesRemoved = 0;
+            boolean serviceFound = false;
+            for (int i = 0; i < fileContent.size(); i++){
+                String[] line = fileContent.get(i);
+                if(line[1].equals(accountName)){
+                    fileContentLines.remove(i - howManyServicesRemoved);
+                    howManyServicesRemoved++;
+                    serviceFound = true;
+                }
+            }
+            if(serviceFound){
+                FileHandlers.writeFileLines(context, "recentServices.txt", fileContentLines);
+            }
+        }
+    }
+
     public static void editRecentServicesAccountNames(Context context, String oldAccountName, String newAccountName){
         if(FileHandlers.fileExists(context, "recentServices.txt")){
             List<String> fileContentLines = FileHandlers.readFileLines(context, "recentServices.txt");

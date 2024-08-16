@@ -31,6 +31,7 @@ import it.matteobreganni.mypasswords.R;
 import it.matteobreganni.mypasswords.databinding.ActivityMainBinding;
 import utils.EncryptionHandlers;
 import utils.FileHandlers;
+import utils.OtherFunctions;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -233,6 +234,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Handles the popup's new account submit button
+                OtherFunctions.hideKeyboard(v.getContext(), v.getRootView());
 
                 EditText nameEditText = customLayout.findViewById(R.id.editTextAccountName);
                 EditText emailEditText = customLayout.findViewById(R.id.editTextAccountEmail);
@@ -275,6 +277,7 @@ public class MainActivity extends AppCompatActivity {
                             Menu menu = binding.drawerNavigationView.getMenu();
                             addAccountToDrawer(menu, fileHash, account, true);
                         }
+                        OtherFunctions.switchToHomeFragmentAndClearStack(v.getContext());
                         dialog.dismiss();
                         Toast.makeText(MainActivity.this, "Account added!", Toast.LENGTH_SHORT).show();
                     }

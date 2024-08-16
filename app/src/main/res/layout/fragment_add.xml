@@ -10,7 +10,6 @@
     android:id="@+id/addFragment"
     tools:context=".ui.AddFragment">
 
-    <!-- CardView to group UI elements with rounded background -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -55,6 +54,8 @@
                     android:id="@+id/editTextServiceName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:imeOptions="actionNext"
                     android:background="@color/editTextBackground"
                     android:hint="Service name" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -95,6 +96,8 @@
                     android:id="@+id/editTextAddServicePassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:imeOptions="actionDone"
                     android:background="@color/editTextBackground"
                     android:hint="Secret key"
                     android:inputType="textPassword"
