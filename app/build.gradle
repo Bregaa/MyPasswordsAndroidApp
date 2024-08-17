@@ -16,6 +16,13 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def newName = "MyPasswords-${variant.versionName}.apk"
+            output.outputFileName = newName
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
