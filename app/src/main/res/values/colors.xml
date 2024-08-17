@@ -8,7 +8,8 @@
     <color name="primaryVariant">@android:color/system_accent1_500</color>
     <color name="secondary">@android:color/system_accent2_300</color>
     <color name="secondaryVariant">@android:color/system_accent2_500</color>
-    <color name="backgroundFragment">@android:color/system_accent1_300</color>
+    <color name="backgroundFragment">@android:color/system_accent1_400</color>
+    <color name="statusBarColor">@android:color/system_accent1_300</color>
     <color name="editTextLineColor">@android:color/black</color>
     <color name="editTextBackground">#FFFFFFFF</color>
 
