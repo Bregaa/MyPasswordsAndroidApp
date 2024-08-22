@@ -13,6 +13,12 @@
     <color name="editTextLineColor">@android:color/black</color>
     <color name="editTextBackground">#FFFFFFFF</color>
 
+    <!--Onboarding screen colors-->
+    <color name="onboardingTitle">@android:color/system_accent1_400</color>
+    <color name="inactiveDotColor">@android:color/system_accent1_100</color>
+    <color name="activeDotColor">@android:color/system_accent1_300</color>
+    <color name="onboardingButtonText">@android:color/system_accent1_300</color>
+
     <!--Bottom menu colors-->
     <color name="bottomMenuBackground">#FFFFFFFF</color>
     <color name="bottomMenuSelectedItem">@android:color/system_accent1_400</color>
@@ -47,10 +53,13 @@
     <color name="fragmentHintText">#7E7E7E</color>
     <color name="fragmentEditTextLineColor">@android:color/system_accent1_300</color>
     <color name="fragmentButtonBackground">@android:color/system_accent1_300</color>
+    <color name="fragmentButtonBackgroundAlternative">#FFFFFFFF</color>
     <color name="fragmentButtonText">#FFFFFFFF</color>
+    <color name="fragmentButtonTextAlternative">#000000</color>
     <color name="fragmentButton2Background">#FFFFFFFF</color>
     <color name="fragmentButton2Text">@android:color/system_accent1_300</color>
     <color name="fragmentWarning">@android:color/system_accent2_300</color>
     <color name="fragmentTextIcon">@android:color/system_accent1_300</color>
     <color name="fragmentCardViewBackground">#FFFFFFFF</color>
+
 </resources>

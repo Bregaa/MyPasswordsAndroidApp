@@ -11,9 +11,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,7 +30,6 @@ import java.util.List;
 
 import it.matteobreganni.mypasswords.R;
 import it.matteobreganni.mypasswords.databinding.ActivityMainBinding;
-import utils.EncryptionHandlers;
 import utils.FileHandlers;
 import utils.OtherFunctions;
 
@@ -47,14 +47,25 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        /*Setting default stuff*/
+        // Check if the introduction has been shown fully
+        SharedPreferences prefs = getSharedPreferences("myPrefs", MODE_PRIVATE);
+        boolean hasIntroductionBeenShown = prefs.getBoolean("hasIntroductionBeenShown", false);
+        if (!hasIntroductionBeenShown) {
+            // Launch IntroductionActivity
+            Intent intent = new Intent(MainActivity.this, OnboardingActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
+        // Setting default stuff
         replaceFragment(new HomeFragment(), "HomeFragment");    // Set the default fragment
         binding.drawerNavigationView.getMenu().getItem(0).setChecked(true);; // Set the default selected item of the drawer menu
         binding.bottomNavigationView.setSelectedItemId(R.id.home);  // Set the default selected item of the bottom menu
         binding.bottomNavigationView.setBackground(null);
         initializeDrawerMenuAccountsList(this); // Initializes the drawer menu's items with the saved accounts
 
-        /*Drawer menu initializations*/
+        // Drawer menu initializations
         toggle = new ActionBarDrawerToggle(this, binding.drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);  // Links drawer to the action bar
         binding.drawerLayout.addDrawerListener(toggle); // Toggle will handle the interactions between action bar and drawer
         toggle.syncState(); // Syncs the action bar icon to the state of the drawer
