@@ -1,6 +1,7 @@
 package it.matteobreganni.mypasswords.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -30,8 +32,10 @@ public class OnboardingActivity extends AppCompatActivity {
     private LinearLayout dotsLayout;
     private TextView[] dots;
     private Button sliderNextButton, sliderSkipButton, sliderBeginButton, sliderBackButton;
+    private ImageButton githubButton;
+    private CardView githubButtonCardView;
     private boolean firstLoad = true;
-    private Animation slideUpAnimation;
+    private Animation slideUpAnimation, fadeInAnimation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +48,11 @@ public class OnboardingActivity extends AppCompatActivity {
         sliderSkipButton = findViewById(R.id.sliderSkipButton);
         sliderBackButton = findViewById(R.id.sliderBackButton);
         sliderBeginButton = findViewById(R.id.sliderBeginButton);
+        githubButtonCardView = findViewById(R.id.githubButtonCardView);
+        githubButton = findViewById(R.id.githubButton);
 
         slideUpAnimation = AnimationUtils.loadAnimation(this, R.anim.slide_up);
+        fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
 
         slideItems = new ArrayList<>();
         slideItems.add(new SlideItem(R.drawable.ic_baseline_vpn_key_24, "Generate and retrieve passwords easily", "To generate a password, all you need is the name of the service you're creating a password for and your secret key!" +
@@ -82,20 +89,25 @@ public class OnboardingActivity extends AppCompatActivity {
                     sliderBackButton.setVisibility(View.INVISIBLE);
                     sliderNextButton.setVisibility(View.VISIBLE);
                     sliderSkipButton.setVisibility(View.VISIBLE);
+                    githubButtonCardView.setVisibility(View.INVISIBLE);
                     sliderBeginButton.setVisibility(View.INVISIBLE);
                 } else if (position == slideItems.size() - 1) {
                     sliderBackButton.setVisibility(View.INVISIBLE);
                     sliderNextButton.setVisibility(View.INVISIBLE);
                     sliderSkipButton.setVisibility(View.INVISIBLE);
+                    githubButtonCardView.setVisibility(View.VISIBLE);
                     sliderBeginButton.setVisibility(View.VISIBLE);
 
+                    githubButtonCardView.startAnimation(fadeInAnimation);
                     sliderBeginButton.startAnimation(slideUpAnimation);
                 } else {
                     sliderBackButton.setVisibility(View.VISIBLE);
                     sliderNextButton.setVisibility(View.VISIBLE);
                     sliderSkipButton.setVisibility(View.VISIBLE);
+                    githubButtonCardView.setVisibility(View.INVISIBLE);
                     sliderBeginButton.setVisibility(View.INVISIBLE);
 
+                    githubButtonCardView.clearAnimation();
                     sliderBeginButton.clearAnimation();
                 }
             }
@@ -122,6 +134,12 @@ public class OnboardingActivity extends AppCompatActivity {
         sliderBeginButton.setOnClickListener(v -> {
             introductionHasBeenShown();
             navigateToMainActivity();
+        });
+
+        githubButton.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(android.net.Uri.parse("https://github.com/Bregaa/MyPasswordsAndroidApp"));
+            startActivity(intent);
         });
     }
 
