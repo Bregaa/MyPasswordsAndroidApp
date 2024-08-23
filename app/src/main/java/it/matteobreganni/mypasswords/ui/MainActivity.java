@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -144,11 +145,17 @@ public class MainActivity extends AppCompatActivity {
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                binding.drawerLayout.closeDrawer(GravityCompat.START);
+                NavigationView navigationView = findViewById(R.id.drawerNavigationView);
+                Menu menu = navigationView.getMenu();
+                if(menu.size() == 1){
+                    Toast.makeText(v.getContext(), "First, create an account!", Toast.LENGTH_SHORT).show();
+                }else{
+                    binding.drawerLayout.closeDrawer(GravityCompat.START);
 
-                binding.bottomNavigationView.setSelectedItemId(R.id.home);
-                changeFabColor(false);
-                replaceFragment(new SettingsFragment(), "SettingsFragment");
+                    binding.bottomNavigationView.setSelectedItemId(R.id.home);
+                    changeFabColor(false);
+                    replaceFragment(new SettingsFragment(), "SettingsFragment");
+                }
             }
         });
 

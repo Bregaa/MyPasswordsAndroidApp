@@ -1,5 +1,6 @@
 package it.matteobreganni.mypasswords.ui;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -30,6 +32,7 @@ public class SettingsFragment extends Fragment {
     private RecyclerView recyclerView;
     private AccountsSettingsAdapter adapter;
     private List<AccountSettingsItem> items;
+    private ImageButton settingsGithubButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,6 +47,7 @@ public class SettingsFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        settingsGithubButton = view.findViewById(R.id.settingsGithubButton);
 
         // Initialize the accounts list
         items = new ArrayList<>();
@@ -57,5 +61,12 @@ public class SettingsFragment extends Fragment {
         NavigationView navigationView = getActivity().findViewById(R.id.drawerNavigationView);
         adapter = new AccountsSettingsAdapter(items, navigationView);
         recyclerView.setAdapter(adapter);
+
+        // Github button listener
+        settingsGithubButton.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(android.net.Uri.parse("https://github.com/Bregaa/MyPasswordsAndroidApp"));
+            startActivity(intent);
+        });
     }
 }
