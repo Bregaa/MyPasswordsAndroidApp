@@ -55,21 +55,21 @@ public class OnboardingActivity extends AppCompatActivity {
         fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
 
         slideItems = new ArrayList<>();
-        slideItems.add(new SlideItem(R.drawable.ic_baseline_vpn_key_24, "Generate and retrieve passwords easily", "To generate a password, all you need is the name of the service you're creating a password for and your secret key!" +
-                "\n\nThe secret key is the only password you will need to choose and remember, in order to generate and retrieve your passwords." +
-                "\n\nServices will be saved to simplify the retrieval of passwords when you need it, to avoid misspelling the service's name and getting a wrong password."));
-        slideItems.add(new SlideItem(R.drawable.ic_baseline_new_label_24, "Simplify password retrievals through aliases", "Adding aliases to your services will simplify their research when you need them!" +
+        slideItems.add(new SlideItem(R.drawable.ic_baseline_vpn_key_24, "Effortless Password Generation & Retrieval", "Generate passwords easily with just the service name and your secret key!" +
+                "\n\nThe secret key is the only password you’ll ever need to remember." +
+                "\n\nServices are saved to simplify the password's retrieval and to avoid any typos that would generate a wrong password."));
+        slideItems.add(new SlideItem(R.drawable.ic_baseline_new_label_24, "Streamline Password Management with Aliases", "Simplify your password retrieval by adding aliases to your services." +
                 "\n\nFor example, on the \"Google\" service, you could add \"Youtube\" and \"Gmail\" as aliases, since they all have the same password that has been generated through the \"Google\" service name."));
-        slideItems.add(new SlideItem(R.drawable.ic_baseline_switch_account_24, "Manage multiple profiles", "Create a different profile for each one of your emails." +
-                "\n\nDifferent profiles will generate different passwords for the same services, even if the secret key is the same! If you wish, you can also use different secret keys across different profiles."));
-        slideItems.add(new SlideItem(R.drawable.ic_baseline_lock_24, "Keep your passwords safe", "What is the safest way to store passwords? Not storing them!" +
-                "\n\nThanks to the generation mechanism none of the generated passwords have to be saved anywhere, because you will be able to re-generate the same exact passwords by choosing the same service name and writing your secret key!" +
-                "\n\nAlso, MyPasswords saves the necessary data to manage the app locally on your device, nothing is saved in the cloud or shared in any way."));
-        slideItems.add(new SlideItem(R.drawable.ic_baseline_info_24, "How does it work?", "Each password is created by hashing the combination of the profile's email, the service you need a password for, and a secret key you choose. " +
-                "\n\nThe hash mechanism ensures the same password is generated every time the same three parameters are used. Different emails, services or secret keys will generate different passwords. This means that only you are able to re-generate your passwords" +
+        slideItems.add(new SlideItem(R.drawable.ic_baseline_switch_account_24, "Manage Multiple Profiles", "Create a different profile for each one of your emails." +
+                "\n\nDifferent profiles will generate unique passwords for the same services, even with the same secret key. You can also use different secret keys across profiles for added security."));
+        slideItems.add(new SlideItem(R.drawable.ic_baseline_lock_24, "Your Passwords, Safeguarded", "What is the safest way to store passwords? Not storing them at all!" +
+                "\n\nMyPasswords allows you to regenerate your passwords anytime, without having to store them anywhere. You will be able to re-generate the same exact passwords by choosing the same service name and writing your secret key!" +
+                "\n\nAlso, MyPasswords saves the data necessary to manage the app locally on your device. Nothing is saved in the cloud or shared in any way."));
+        slideItems.add(new SlideItem(R.drawable.ic_baseline_info_24, "How It Works", "Each password is created by hashing the combination of the profile's email, the service's name and your secret key. " +
+                "\n\nThis secure method ensures the same password is generated every time the same three parameters are used. Different emails, services or secret keys will generate different passwords. This means that only you are able to re-generate your passwords, because only you know the secret key!" +
                 "\n\nFor example, \"email@email.com\", \"google\" and \"mypassword\" will always generate the password \"hq5Pf2I27s+Ty1i\" (try it yourself in the app!)."));
-        slideItems.add(new SlideItem(R.drawable.ic_baseline_code_24, "A source-available project", "This app is free and it's source code is available on Github. If you're not sure about it's security, feel free to check the code and build the app yourself!" +
-                "\n\nIf you need any more info on how the app works, visit the github page below!" +
+        slideItems.add(new SlideItem(R.drawable.ic_baseline_code_24, "A Source-Available Project", "MyPasswords is free and it's source code is available on Github. If you're concerned about it's security, feel free to review the code and build the app yourself!" +
+                "\n\nFor more information on how the app works, visit the GitHub page linked below." +
                 "\n\n\nEnjoy the app, " +
                 "\nMatteo Breganni"));
 
