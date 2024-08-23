@@ -18,6 +18,8 @@
     <color name="inactiveDotColor">@android:color/system_accent1_100</color>
     <color name="activeDotColor">@android:color/system_accent1_300</color>
     <color name="onboardingButtonText">@android:color/system_accent1_300</color>
+    <color name="onboardingText">#000000</color>
+    <color name="onboardingBackground">#FFFFFF</color>
 
     <!--Bottom menu colors-->
     <color name="bottomMenuBackground">#FFFFFFFF</color>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/onboardingBackground"
     tools:context=".ui.OnboardingActivity">
 
     <TextView
@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="MyPasswords"
-        android:textSize="45sp"
+        android:textSize="50sp"
         android:textColor="@color/onboardingTitle"
         android:layout_marginTop="70dp"
         android:layout_marginStart="16dp"
