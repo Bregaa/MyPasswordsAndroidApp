@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'it.matteobreganni.mypasswords'
+    namespace 'com.matteobreganni.mypasswords'
     compileSdk 33
 
     defaultConfig {
-        applicationId "it.matteobreganni.mypasswords"
+        applicationId "com.matteobreganni.mypasswords"
         minSdk 31
         targetSdk 33
         versionCode 2

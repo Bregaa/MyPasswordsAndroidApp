@@ -13,7 +13,7 @@
         android:theme="@style/Theme.MyPasswords"
         tools:targetApi="31">
         <activity
-            android:name=".ui.OnboardingActivity"
+            android:name="com.matteobreganni.mypasswords.ui.OnboardingActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:exported="false">
             <meta-data
@@ -21,7 +21,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".ui.MainActivity"
+            android:name="com.matteobreganni.mypasswords.ui.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>

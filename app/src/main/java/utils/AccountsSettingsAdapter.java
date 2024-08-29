@@ -1,7 +1,5 @@
 package utils;
 
-import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,9 +20,7 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.matteobreganni.mypasswords.R;
-import it.matteobreganni.mypasswords.ui.HomeFragment;
-import it.matteobreganni.mypasswords.ui.MainActivity;
+import com.matteobreganni.mypasswords.R;
 
 public class AccountsSettingsAdapter extends RecyclerView.Adapter<AccountsSettingsAdapter.ViewHolder> {
 

@@ -1,4 +1,4 @@
-package it.matteobreganni.mypasswords;
+package com.matteobreganni.mypasswords;
 
 import android.content.Context;
 

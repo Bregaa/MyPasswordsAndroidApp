@@ -8,9 +8,9 @@ import android.view.inputmethod.InputMethodManager;
 
 import java.util.List;
 
-import it.matteobreganni.mypasswords.R;
-import it.matteobreganni.mypasswords.ui.HomeFragment;
-import it.matteobreganni.mypasswords.ui.MainActivity;
+import com.matteobreganni.mypasswords.R;
+import com.matteobreganni.mypasswords.ui.HomeFragment;
+import com.matteobreganni.mypasswords.ui.MainActivity;
 
 public class OtherFunctions {
 

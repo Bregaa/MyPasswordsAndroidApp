@@ -1,4 +1,4 @@
-package it.matteobreganni.mypasswords.ui;
+package com.matteobreganni.mypasswords.ui;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -22,7 +22,7 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.matteobreganni.mypasswords.R;
+import com.matteobreganni.mypasswords.R;
 import utils.AccountSettingsItem;
 import utils.AccountsSettingsAdapter;
 import utils.FileHandlers;

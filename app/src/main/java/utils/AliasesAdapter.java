@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -19,8 +18,7 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
 
-import it.matteobreganni.mypasswords.R;
-import it.matteobreganni.mypasswords.ui.MainActivity;
+import com.matteobreganni.mypasswords.R;
 
 public class AliasesAdapter extends RecyclerView.Adapter<AliasesAdapter.AliasViewHolder> {
 

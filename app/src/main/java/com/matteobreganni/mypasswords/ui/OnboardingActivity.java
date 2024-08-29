@@ -1,4 +1,4 @@
-package it.matteobreganni.mypasswords.ui;
+package com.matteobreganni.mypasswords.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -7,8 +7,6 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -22,7 +20,7 @@ import com.google.android.gms.common.SignInButton;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.matteobreganni.mypasswords.R;
+import com.matteobreganni.mypasswords.R;
 import utils.SlideItem;
 import utils.SliderAdapter;
 

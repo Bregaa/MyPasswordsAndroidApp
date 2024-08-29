@@ -1,4 +1,4 @@
-package it.matteobreganni.mypasswords.ui;
+package com.matteobreganni.mypasswords.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -15,7 +15,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,8 +28,8 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
 
-import it.matteobreganni.mypasswords.R;
-import it.matteobreganni.mypasswords.databinding.ActivityMainBinding;
+import com.matteobreganni.mypasswords.R;
+import com.matteobreganni.mypasswords.databinding.ActivityMainBinding;
 import utils.FileHandlers;
 import utils.OtherFunctions;
 

@@ -8,7 +8,7 @@
     android:padding="16dp"
     android:background="@color/backgroundFragment"
     android:id="@+id/addFragment"
-    tools:context=".ui.AddFragment">
+    tools:context="com.matteobreganni.mypasswords.ui.AddFragment">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -120,7 +120,7 @@
 
     <fragment
         android:id="@+id/reusable_fragment"
-        android:name="it.matteobreganni.mypasswords.ui.GeneratedPasswordFragment"
+        android:name="com.matteobreganni.mypasswords.ui.GeneratedPasswordFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 </LinearLayout>

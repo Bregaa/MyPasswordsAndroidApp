@@ -10,7 +10,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
-import it.matteobreganni.mypasswords.R;
+import com.matteobreganni.mypasswords.R;
 
 public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.SearchViewHolder> {
 

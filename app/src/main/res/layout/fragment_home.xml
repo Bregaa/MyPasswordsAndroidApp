@@ -8,7 +8,7 @@
     android:padding="16dp"
     android:background="@color/backgroundFragment"
     android:id="@+id/homeFragment"
-    tools:context=".ui.HomeFragment">
+    tools:context="com.matteobreganni.mypasswords.ui.HomeFragment">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
