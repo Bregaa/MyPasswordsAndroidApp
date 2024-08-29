@@ -1,12 +1,16 @@
 package com.matteobreganni.mypasswords.ui;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -14,12 +18,23 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.auth.api.identity.BeginSignInRequest;
+import com.google.android.gms.auth.api.identity.BeginSignInResult;
+import com.google.android.gms.auth.api.identity.Identity;
+import com.google.android.gms.auth.api.identity.SignInClient;
+import com.google.android.gms.auth.api.identity.SignInCredential;
 import com.google.android.gms.common.SignInButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.matteobreganni.mypasswords.BuildConfig;
 import com.matteobreganni.mypasswords.R;
 import utils.SlideItem;
 import utils.SliderAdapter;
@@ -38,10 +53,28 @@ public class OnboardingActivity extends AppCompatActivity {
     private boolean firstLoad = true;
     private Animation slideUpAnimation, fadeInAnimation;
 
+    private SignInClient oneTapClient;
+    private BeginSignInRequest signInRequest;
+    private static final int REQ_ONE_TAP = 69;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_onboarding);
+
+        // Google sign-in config
+        oneTapClient = Identity.getSignInClient(this);
+        signInRequest = BeginSignInRequest.builder()
+                .setPasswordRequestOptions(BeginSignInRequest.PasswordRequestOptions.builder()
+                        .setSupported(true)
+                        .build())
+                .setGoogleIdTokenRequestOptions(BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
+                        .setSupported(true)
+                        .setServerClientId(BuildConfig.GOOGLE_CLIENT_ID)
+                        .setFilterByAuthorizedAccounts(false)
+                        .build())
+                .setAutoSelectEnabled(true)
+                .build();
 
         sliderViewPager = findViewById(R.id.sliderViewPager);
         dotsLayout = findViewById(R.id.dotsLayout);
@@ -54,7 +87,7 @@ public class OnboardingActivity extends AppCompatActivity {
         for (int i = 0; i < googleSignInButton.getChildCount(); i++) {
             View v = googleSignInButton.getChildAt(i);
             if (v instanceof TextView) {
-                ((TextView) v).setTextSize(18);  // Set your desired text size here
+                ((TextView) v).setTextSize(18);
                 break;
             }
         }
@@ -153,6 +186,30 @@ public class OnboardingActivity extends AppCompatActivity {
 
         googleSignInButton.setOnClickListener(v -> {
             //TODO
+            oneTapClient.beginSignIn(signInRequest)
+                    .addOnSuccessListener(this, new OnSuccessListener<BeginSignInResult>() {
+                        @Override
+                        public void onSuccess(BeginSignInResult result) {
+                            try {
+                                startIntentSenderForResult(
+                                        result.getPendingIntent().getIntentSender(), REQ_ONE_TAP,
+                                        null, 0, 0, 0);
+                            } catch (IntentSender.SendIntentException e) {
+                                Log.e("SignInLog", "Couldn't start One Tap UI: " + e.getLocalizedMessage());
+                                Toast.makeText(v.getContext(), "Error signing in (3)", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    })
+                    .addOnFailureListener(this, new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            // No saved credentials found. Launch the One Tap sign-up flow, or
+                            // do nothing and continue presenting the signed-out UI.
+                            Log.d("SignInLog", e.getLocalizedMessage());
+                            Toast.makeText(v.getContext(), "Error signing in (4)", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
             introductionHasBeenShown();
             navigateToMainActivity();
         });
@@ -162,6 +219,45 @@ public class OnboardingActivity extends AppCompatActivity {
             intent.setData(android.net.Uri.parse("https://github.com/Bregaa/MyPasswordsAndroidApp"));
             startActivity(intent);
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case REQ_ONE_TAP:
+                try {
+                    SignInCredential credential = oneTapClient.getSignInCredentialFromIntent(data);
+                    String idToken = credential.getGoogleIdToken();
+                    String username = credential.getDisplayName();
+                    String email = credential.getId();
+                    String password = credential.getPassword();
+                    Toast.makeText(this, "Welcome " + username + "!", Toast.LENGTH_SHORT).show();
+                    Log.d("SignInLog", "User " + username + "signed in");
+                    if (idToken !=  null) {
+                        // I will probably have to store this
+                    }
+                } catch (ApiException e) {
+                    switch (e.getStatusCode()) {
+                        case CommonStatusCodes.CANCELED:
+                            Log.d("SignInLog", "One-tap dialog was closed.");
+                            Toast.makeText(this, "One-tap dialog was closed.", Toast.LENGTH_SHORT).show();
+                            break;
+                        case CommonStatusCodes.NETWORK_ERROR:
+                            Log.e("SignInLog", "One-tap encountered a network error.");
+                            Toast.makeText(this, "Error signing in (1)", Toast.LENGTH_SHORT).show();
+                            break;
+                        default:
+                            Log.e("SignInLog", "Couldn't get credential from result."
+                                    + e.getLocalizedMessage());
+                            Toast.makeText(this, "Error signing in (2)", Toast.LENGTH_SHORT).show();
+                            break;
+                    }
+
+                }
+                break;
+        }
     }
 
     private void addDotsIndicator(int position) {
