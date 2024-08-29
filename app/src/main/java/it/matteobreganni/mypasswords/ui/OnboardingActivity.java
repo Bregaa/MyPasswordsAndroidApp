@@ -17,6 +17,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.common.SignInButton;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,8 +33,9 @@ public class OnboardingActivity extends AppCompatActivity {
     private List<SlideItem> slideItems;
     private LinearLayout dotsLayout;
     private TextView[] dots;
-    private Button sliderNextButton, sliderSkipButton, sliderBeginButton, sliderBackButton;
+    private Button sliderNextButton, sliderSkipButton, sliderBackButton;
     private ImageButton githubButton;
+    private SignInButton googleSignInButton;
     private CardView githubButtonCardView;
     private boolean firstLoad = true;
     private Animation slideUpAnimation, fadeInAnimation;
@@ -47,9 +50,16 @@ public class OnboardingActivity extends AppCompatActivity {
         sliderNextButton = findViewById(R.id.sliderNextButton);
         sliderSkipButton = findViewById(R.id.sliderSkipButton);
         sliderBackButton = findViewById(R.id.sliderBackButton);
-        sliderBeginButton = findViewById(R.id.sliderBeginButton);
         githubButtonCardView = findViewById(R.id.githubButtonCardView);
         githubButton = findViewById(R.id.githubButton);
+        googleSignInButton = findViewById(R.id.googleSignInButton);
+        for (int i = 0; i < googleSignInButton.getChildCount(); i++) {
+            View v = googleSignInButton.getChildAt(i);
+            if (v instanceof TextView) {
+                ((TextView) v).setTextSize(18);  // Set your desired text size here
+                break;
+            }
+        }
 
         slideUpAnimation = AnimationUtils.loadAnimation(this, R.anim.slide_up);
         fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
@@ -72,6 +82,9 @@ public class OnboardingActivity extends AppCompatActivity {
                 "\n\nFor more information on how the app works, visit the GitHub page linked below." +
                 "\n\n\nEnjoy the app, " +
                 "\nMatteo Breganni"));
+        slideItems.add(new SlideItem(R.drawable.ic_baseline_login_24, "Sign In", "Sign in with your Google account to securely back up your data to Google Drive." +
+                "\n\nThis step is essential for sharing your data with our Windows app, allowing you to keep your services and profiles seamlessly synchronized." +
+                "\n\nYour data will automatically sync every time you open the app or make any changes. You can also manually trigger a sync in the settings whenever needed."));
 
         sliderAdapter = new SliderAdapter(this, slideItems);
         sliderViewPager.setAdapter(sliderAdapter);
@@ -90,25 +103,34 @@ public class OnboardingActivity extends AppCompatActivity {
                     sliderNextButton.setVisibility(View.VISIBLE);
                     sliderSkipButton.setVisibility(View.VISIBLE);
                     githubButtonCardView.setVisibility(View.INVISIBLE);
-                    sliderBeginButton.setVisibility(View.INVISIBLE);
-                } else if (position == slideItems.size() - 1) {
+                    googleSignInButton.setVisibility(View.INVISIBLE);
+                } else if (position == slideItems.size() - 2) {
+                    sliderBackButton.setVisibility(View.VISIBLE);
+                    sliderNextButton.setVisibility(View.VISIBLE);
+                    sliderSkipButton.setVisibility(View.VISIBLE);
+                    githubButtonCardView.setVisibility(View.VISIBLE);
+                    googleSignInButton.setVisibility(View.INVISIBLE);
+
+                    githubButtonCardView.startAnimation(fadeInAnimation);
+                    googleSignInButton.clearAnimation();
+                }else if (position == slideItems.size() - 1){
                     sliderBackButton.setVisibility(View.INVISIBLE);
                     sliderNextButton.setVisibility(View.INVISIBLE);
                     sliderSkipButton.setVisibility(View.INVISIBLE);
-                    githubButtonCardView.setVisibility(View.VISIBLE);
-                    sliderBeginButton.setVisibility(View.VISIBLE);
+                    githubButtonCardView.setVisibility(View.INVISIBLE);
+                    googleSignInButton.setVisibility(View.VISIBLE);
 
-                    githubButtonCardView.startAnimation(fadeInAnimation);
-                    sliderBeginButton.startAnimation(slideUpAnimation);
+                    googleSignInButton.startAnimation(slideUpAnimation);
+                    githubButtonCardView.clearAnimation();
                 } else {
                     sliderBackButton.setVisibility(View.VISIBLE);
                     sliderNextButton.setVisibility(View.VISIBLE);
                     sliderSkipButton.setVisibility(View.VISIBLE);
                     githubButtonCardView.setVisibility(View.INVISIBLE);
-                    sliderBeginButton.setVisibility(View.INVISIBLE);
+                    googleSignInButton.setVisibility(View.INVISIBLE);
 
                     githubButtonCardView.clearAnimation();
-                    sliderBeginButton.clearAnimation();
+                    googleSignInButton.clearAnimation();
                 }
             }
         });
@@ -131,7 +153,8 @@ public class OnboardingActivity extends AppCompatActivity {
             sliderViewPager.setCurrentItem(slideItems.size() - 1, true);
         });
 
-        sliderBeginButton.setOnClickListener(v -> {
+        googleSignInButton.setOnClickListener(v -> {
+            //TODO
             introductionHasBeenShown();
             navigateToMainActivity();
         });
